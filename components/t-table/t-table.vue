@@ -1,0 +1,95 @@
+<template>
+	<view class="t-table" :style="{ 'border-width': border + 'px', 'border-color': borderColor,
+	'min-width': minWidth,
+	'width' : width, }">
+		<slot></slot>
+	</view>
+</template>
+
+<script>
+	export default {
+		props: {
+			border: {
+				type: String,
+				default: '1'
+			},
+			borderColor: {
+				type: String,
+				default: '#d0dee5'
+			},
+			isCheck: {
+				type: Boolean,
+				default: false
+			},
+      width: {
+        type: String,
+        default: '100%'
+      },
+      minWidth: {
+        type: String,
+        default: 'unset'
+      }
+		},
+		provide() {
+			return {
+				table: this
+			};
+		},
+		data() {
+			return {};
+		},
+		created() {
+			this.childrens = [];
+			this.index = 0;
+		},
+		methods: {
+			fire(e, index, len) {
+				let childrens = this.childrens;
+				// 全选
+				if (index === 0) {
+					childrens.map((vm, index) => {
+						vm.checkboxData.checked = e;
+						return vm;
+					});
+				} else {
+					let isAll = childrens.find((n, ids) => ids !== 0 && !n.checkboxData.checked);
+					childrens[0].checkboxData.checked = isAll ? false : true;
+				}
+
+				let fireArr = [];
+				for (let i = 0; i < childrens.length; i++) {
+					if (childrens[i].checkboxData.checked && i !== 0) {
+						fireArr.push(childrens[i].checkboxData.value - 1);
+					}
+				}
+				this.$emit('change', {
+					detail: fireArr
+				});
+			}
+		}
+	};
+</script>
+
+<style lang="scss">
+	.t-table {
+		width: 100%;
+		border-left: none;
+		border-top: none;
+		box-sizing: border-box;
+		flex-direction: column;
+	}
+
+	.t-table>>>t-tr {
+		display: flex;
+	}
+
+	.t-table>>>t-tr:nth-child(2n) {
+		background: #f5f5f5;
+	}
+
+	/* #ifdef H5 */
+	.t-table>>>.t-tr:nth-child(2n) {
+		background: #f5f5f5;
+	}
+	/* #endif */
+</style>

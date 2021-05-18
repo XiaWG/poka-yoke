@@ -1,0 +1,310 @@
+{
+	"pages": [
+		{
+			"path": "pages/menu/firstPage",
+			"style": {
+				"navigationBarTitleText": "开屏页",
+				"navigationStyle":"custom",
+				"app-plus":{
+					"titleView":false
+				}
+			}
+		},
+		{
+			"path": "pages/menu/menu",
+			"style": {
+				"navigationBarTitleText": "主页"
+			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
+		},
+		{
+			"path": "pages/login/servconfig",
+			"style": {
+				"navigationBarTitleText": "服务器配置"
+			}
+		},
+		{
+			"path": "pages/message/message",
+			"style": {
+				"navigationBarTitleText": "消息",
+				"enablePullDownRefresh": true 
+			}
+		},
+		{
+			"path": "pages/operateList/index",
+			"style": {
+				"navigationBarTitleText": "工序列表"
+			}
+		},
+		
+		{
+			"path": "pages/center/center",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pages/update-password/update-password",
+			"style": {
+				"navigationBarTitleText": "修改密码"
+			}
+		}, 
+		{
+			"path": "pages/views/info/collect",
+			"style": {
+				"navigationBarTitleText": "信息采集",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/views/info/materailStationForm",
+			"style": {
+				"navigationBarTitleText": "信息采集-料站表",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false,
+				"app-plus": { 
+					"titleNView": {
+						"buttons": [{
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "right",
+							"fontSize": "30px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue75e"
+						}]
+					}  
+				}
+			}
+		},
+		{
+			"path": "pages/views/info/infoCollectMain",
+			"style": {
+				"navigationBarTitleText": "信息采集-料站表",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false,
+				"app-plus": { 
+					"titleNView": {
+						"buttons": [{
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "right",
+							"fontSize": "24px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue75e"
+						}]
+					}  
+				}
+			}
+		},
+		{
+			"path": "pages/views/info/memberPermision",
+			"style": {
+				"navigationBarTitleText": "信息采集-员工权限",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/views/info/roomMaterial",
+			"style": {
+				"navigationBarTitleText": "信息采集-仓库物料",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/views/provideError/index",
+			"style": {
+				"navigationBarTitleText": "生产防错",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false,
+				"app-plus": { 
+					"titleNView": {
+						"buttons": [{
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "right",
+							"fontSize": "24px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue75e"
+						}]
+					}  
+				}
+			}
+		},
+		{
+			"path": "pages/views/provideError/main",
+			"style": {
+				"navigationBarTitleText": "生产防错",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false,
+				"app-plus": { 
+					"titleNView": {
+						"buttons": [{
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "right",
+							"fontSize": "24px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue75e"
+						}]
+					}  
+				}
+			}
+		},
+		{
+			"path": "pages/views/report/pdaScanHistoryList",
+			"style": {
+				"navigationBarTitleText": "上料记录",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/views/setting/index",
+			"style": {
+				"navigationBarTitleText": "参数配置",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/views/setting/permision",
+			"style": {
+				"navigationBarTitleText": "参数配置-权限",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/views/setting/prameOrder",
+			"style": {
+				"navigationBarTitleText": "参数配置-物料参数排序",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/views/setting/beep",
+			"style": {
+				"navigationBarTitleText": "参数配置-蜂鸣设置",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/views/setting/roomName",
+			"style": {
+				"navigationBarTitleText": "参数配置-仓库名称",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/views/lzb/index",
+			"style": {
+				"navigationBarTitleText": "料站表",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/views/lzb/detail",
+			"style": {
+				"navigationBarTitleText": "料站表-详情",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false,
+				"app-plus": { 
+					"titleNView": {
+						"buttons": [{
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "right",
+							"fontSize": "24px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue612"
+						}]
+					}  
+				}
+			}
+		},
+		{
+			"path": "pages/views/report/errorList",
+			"style": {
+				"navigationBarTitleText": "错误记录",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/views/report/IpqcList",
+			"style": {
+				"navigationBarTitleText": "巡检记录",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/views/Ipxj/index",
+			"style": {
+				"navigationBarTitleText": "IPQC巡检",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false,
+				"app-plus": { 
+					"titleNView": {
+						"buttons": [{
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "right",
+							"fontSize": "24px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue75e"
+						}]
+					}  
+				}
+			}
+		},
+		{
+			"path": "pages/views/Ipxj/main",
+			"style": {
+				"navigationBarTitleText": "IPQC巡检",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false,
+				"app-plus": { 
+					"titleNView": {
+						"buttons": [{
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "right",
+							"fontSize": "24px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue75e"
+						}]
+					}  
+				}
+			}
+		}
+		
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarTitleText": "OPENTASK",
+		"navigationBarBackgroundColor": "#1890ff",
+		"backgroundColor": "#EFEFEF"
+	},
+	"tabBar": {
+		"color": "#444444",
+		"selectedColor": "#1890ff",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [
+			
+		]
+	}
+}
