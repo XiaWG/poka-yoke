@@ -228,7 +228,7 @@
 							"float": "right",
 							"fontSize": "24px",
 							"fontSrc": "/static/font/iconfont.ttf",
-							"text": "\ue612"
+							"text": "\ue67c"
 						}]
 					}  
 				}
@@ -285,6 +285,60 @@
 							"fontSize": "24px",
 							"fontSrc": "/static/font/iconfont.ttf",
 							"text": "\ue75e"
+						}]
+					}  
+				}
+			}
+		},
+		{
+			"path": "pages/views/ext/index",
+			"style": {
+				"navigationBarTitleText": "防错",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false,
+				"app-plus": { 
+					"titleNView": {
+						"buttons": [{
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "right",
+							"fontSize": "24px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue75e"
+						}]
+					}  
+				}
+			}
+		},
+		{
+			"path": "pages/views/ext/main",
+			"style": {
+				"navigationBarTitleText": "防错",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false,
+				"app-plus": { 
+					"titleNView": {
+						"buttons": [{
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "left",
+							"fontSize": "24px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue655"
+						}, {
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "right",
+							"fontSize": "24px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue75e"
+						}, {
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "right",
+							"fontSize": "24px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue647"
 						}]
 					}  
 				}

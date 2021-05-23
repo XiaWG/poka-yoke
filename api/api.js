@@ -130,3 +130,23 @@ export const deleteProgramDetailById = (data) =>
     method: "post",
     body: data,
   })
+
+// 
+export const insertPdaScanConfirm = (data) =>
+  request("/pda/pdaOperation/insertPdaScanConfirm", {
+    method: "post",
+    body: data,
+  })
+
+export const updatePdaScanConfirm = (data) =>
+  request("/pda/pdaOperation/updatePdaScanConfirm", {
+    method: "post",
+    body: data,
+  })
+
+  
+export const selectPdaScanConfirmInfo = (data) =>
+  request("/pda/pdaOperation/selectPdaScanConfirmInfo", {
+    method: "post",
+    body: data,
+  })

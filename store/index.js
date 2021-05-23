@@ -31,7 +31,17 @@ export default new Vuex.Store({
 		serv: '',
 		defaultServ: '',
 		stateMachineList: [],
-		beepNum: ''
+		beepNum: '',
+
+		// 缓存线体 机种信息
+		ext: {
+			programId: '',
+			productName: '',
+			productLine: '',
+			jlUser: {},
+			hdUser: {},
+			xjUser: {}
+		}
 	},
 	modules: {
 		v1,
@@ -41,7 +51,10 @@ export default new Vuex.Store({
 			// #ifdef H5
 			uni.setStorageSync("accessToken", payload.accessToken||'');
 			// #endif
-			Object.assign(state, payload);
+			Object.assign(state, payload)
+		},
+		updateExtState(state, payload) {
+			Object.assign(state.ext, payload)
 		},
 		updateLang(state, payload) {
 			const langPack = Object.assign({}, i18n[payload]);

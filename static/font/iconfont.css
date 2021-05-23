@@ -1,6 +1,6 @@
 @font-face {
   font-family: "iconfont"; /* Project id  */
-  src: url('iconfont.ttf?t=1621269613789') format('truetype');
+  src: url('iconfont.ttf?t=1621739714235') format('truetype');
 }
 
 .iconfont {
@@ -20,6 +20,14 @@
 }
 
 .icon-qianbi:before {
-  content: "\e612";
+  content: "\e67c";
+}
+
+.icon-xiaoren:before {
+  content: "\e65a";
+}
+
+.icon-qiehuan:before {
+  content: "\e647";
 }
 

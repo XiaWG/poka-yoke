@@ -55,7 +55,7 @@ export default {
       currentServ: this.$store.state.serv,
       servList: [
         {
-          value: "http://192.168.4.120:8787",
+          value: "http://www.automationmes.com:8787",
           name: "内部测试",
         }
       ],

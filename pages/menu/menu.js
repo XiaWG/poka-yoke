@@ -66,5 +66,17 @@ export default [
 				configValue: "assemble"
 			},
 		],
-	}
+	},
+	{
+		id: 3,
+		title: "拓展区",
+		children: [
+			{
+				id: 1,
+				title: "防错",
+				icon: "xxcj",
+				url: "/pages/views/ext/index",
+			},
+		],
+	},
 ]

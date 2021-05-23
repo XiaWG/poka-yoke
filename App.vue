@@ -4,58 +4,7 @@ import store from "./store/index";
 
 export default {
   onLaunch() {
-    const serv = store.state.serv;
-    //#ifdef APP-PLUS
-    if (plus) {
-      plus.runtime.getProperty(plus.runtime.appid, async (wgtinfo) => {
-        const checkRes = await checkVersion({
-          version: wgtinfo.version,
-        });
-        if (checkRes && checkRes.update) {
-          uni.showModal({
-            //提醒用户更新
-            title: "升级提示",
-            content: "有一些数据需要升级，请点击升级按钮",
-            confirmText: "升级",
-            success(res) {
-              if (res.confirm) {
-                uni.downloadFile({
-                  url: `${serv}/mes-service${checkRes.apk}`,
-                  success: (downloadResult) => {
-                    if (downloadResult.statusCode === 200) {
-                      plus.runtime.install(
-                        downloadResult.tempFilePath,
-                        {
-                          force: false,
-                        },
-                        () => {
-                          plus.runtime.restart();
-                        },
-                        (e) => {}
-                      );
-                    }
-                  },
-                });
-              } else {
-              }
-            },
-          });
-          // uni.showModal({ //提醒用户更新
-          // 	title: "更新提示",
-          // 	content: '有新版本发布，是否确定更新',
-          // 	success(res){
-          // 		if (res.confirm) {
-          // 			plus.runtime.openURL(encodeURI(`${serv}/mes-service${checkRes.apk}`));
-          // 			// plus.runtime.openURL(`${serv}/mes-service${checkRes.apk}`);
-          // 		}else{
-          // 			plus.runtime.quit();
-          // 		}
-          // 	}
-          // })
-        }
-      });
-    }
-    //#endif
+    
   },
   onShow: function () {
     // console.log('App Show')
@@ -68,6 +17,19 @@ export default {
 
 <style lang="scss">
 @import "./common/common.css";
+
+@font-face {
+  font-family: 'iconfont';
+  src: url('@/static/font/iconfont.ttf?t=1621577781686') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 page,
 view {

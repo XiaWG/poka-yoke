@@ -1,48 +1,60 @@
 <template>
-  <view class="menu">
-	  <!-- <view style="flex-direction: column; align-items: center;margin-bottom:60px">
-		  <image class="center-user-pic" src="../../static/IP.png"></image>
-	  </view>
-    <view class="menu_list">
-      <view 
-        v-for="(item, index) in menus"
-        :key="index"
-        class="menu_item"
-        @click="goToPage(item.url)">
-        <image 
-          v-if="item.icon"
-          class="menu_item-icon" 
-          :src="'../../static/icon/' + item.icon + '.png'"
-        />
-        <text class="menu_item-title">
-          {{ item.title }}
-        </text>        
+  <view style="display: flex; flex:1; height: 800px;overflow:auto">
+    <view class="menu">
+      <!-- <view style="flex-direction: column; align-items: center;margin-bottom:60px">
+        <image class="center-user-pic" src="../../static/IP.png"></image>
       </view>
-    </view> -->
-    <view class="menu__list" v-for="(menu, index) in filterMenuOnApp" :key="menu.id">
-      <view 
-        :class="['menu__list__label', closeIndex.includes(index) ? 'menu__list__label_close' : '']"
-        @click="handleCloseIndex(index)"
-      >
-        {{ menu.title }}
-      </view>
-      <view v-show="!closeIndex.includes(index)" class="menu__list__items">
-        <view class="grid">
-          <view
-            v-for="(childMenuItem, childrenIndex) in menu.children"
-            :key="childMenuItem.id"
-            class="grid-c-04"
-            @click="goToPage(childMenuItem.url)"
-          >
-            <image 
-              :src="'../../static/image/' + (childMenuItem.icon || childrenIndex + 1) + '.png'"
-            ></image>
-            <view>{{ childMenuItem.title }}</view>
+      <view class="menu_list">
+        <view 
+          v-for="(item, index) in menus"
+          :key="index"
+          class="menu_item"
+          @click="goToPage(item.url)">
+          <image 
+            v-if="item.icon"
+            class="menu_item-icon" 
+            :src="'../../static/icon/' + item.icon + '.png'"
+          />
+          <text class="menu_item-title">
+            {{ item.title }}
+          </text>        
+        </view>
+      </view> -->
+      <view class="menu__list" v-for="(menu, index) in filterMenuOnApp" :key="menu.id">
+        <view 
+          :class="['menu__list__label', closeIndex.includes(index) ? 'menu__list__label_close' : '']"
+          @click="handleCloseIndex(index)"
+        >
+          {{ menu.title }}
+        </view>
+        <view v-show="!closeIndex.includes(index)" class="menu__list__items">
+          <view class="grid">
+            <view
+              v-for="(childMenuItem, childrenIndex) in menu.children"
+              :key="childMenuItem.id"
+              class="grid-c-04"
+              @click="goToPage(childMenuItem.url)"
+            >
+              <image 
+                :src="'../../static/image/' + (childMenuItem.icon || childrenIndex + 1) + '.png'"
+              ></image>
+              <view>{{ childMenuItem.title }}</view>
+            </view>
+            <view
+              v-if="!menu.children.length"
+              class="no-menu"
+            >
+              <image class="no-menu-image" src="../../static/no-menu.png"></image>
+              <view class="no-menu-label">
+                未配置菜单
+              </view>
+            </view>
           </view>
-          <view
-            v-if="!menu.children.length"
-            class="no-menu"
-          >
+        </view>
+      </view>
+      <view v-if="!filterMenuOnApp.length" class="menu__list">
+        <view class="menu__list__items">
+          <view class="no-menu">
             <image class="no-menu-image" src="../../static/no-menu.png"></image>
             <view class="no-menu-label">
               未配置菜单
@@ -51,17 +63,7 @@
         </view>
       </view>
     </view>
-    <view v-if="!filterMenuOnApp.length" class="menu__list">
-      <view class="menu__list__items">
-        <view class="no-menu">
-          <image class="no-menu-image" src="../../static/no-menu.png"></image>
-          <view class="no-menu-label">
-            未配置菜单
-          </view>
-        </view>
-      </view>
-    </view>
-  </view>
+  </view>  
 </template>
 
 <script>

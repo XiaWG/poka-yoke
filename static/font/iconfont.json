@@ -6,25 +6,39 @@
   "description": "",
   "glyphs": [
     {
-      "icon_id": "3514607",
+      "icon_id": "78201352",
       "name": "实物-键盘",
       "font_class": "shiwu-jianpan",
       "unicode": "e75e",
       "unicode_decimal": 59230
     },
     {
-      "icon_id": "4251777",
+      "icon_id": "78201353",
       "name": "主页",
       "font_class": "zhuye",
       "unicode": "e655",
       "unicode_decimal": 58965
     },
     {
-      "icon_id": "21189967",
+      "icon_id": "78201354",
       "name": "铅笔",
       "font_class": "qianbi",
-      "unicode": "e612",
-      "unicode_decimal": 58898
+      "unicode": "e67c",
+      "unicode_decimal": 59004
+    },
+    {
+      "icon_id": "78461674",
+      "name": "登录",
+      "font_class": "xiaoren",
+      "unicode": "e65a",
+      "unicode_decimal": 58970
+    },
+    {
+      "icon_id": "9568050",
+      "name": "切换",
+      "font_class": "qiehuan",
+      "unicode": "e647",
+      "unicode_decimal": 58951
     }
   ]
 }

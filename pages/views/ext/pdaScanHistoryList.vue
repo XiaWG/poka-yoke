@@ -66,7 +66,7 @@
           v-model.trim="rangeTime"
         />
       </view>
-      <view>
+      <!-- <view>
         <input 
           class="queryInput"
           type="text"
@@ -80,7 +80,7 @@
           placeholder="请扫描或录入线体名称"
           v-model.trim="query.lineName"
         />        
-      </view>
+      </view> -->
       <view>
         <input class="queryInput"
           type="text"
@@ -128,6 +128,9 @@ export default {
     tTr,
     tTd,
   },
+  props: {
+    option: Object
+  },
   data() {
     return {
       rangeTime: '',
@@ -147,6 +150,8 @@ export default {
   },
 
   mounted () {
+    this.query.programName = this.option.name
+    this.query.lineName = this.option.productLine
     setTimeout(() => {
       this.search({ select: 'top', type: '1' })
     }, 100)
@@ -166,8 +171,8 @@ export default {
     },
     reset () {
       // this.query.createTime = this.$formatterTime(new Date(), false, 1)
-      this.query.programName = ''
-      this.query.lineName = '',
+      // this.query.programName = ''
+      // this.query.lineName = '',
       this.query.stationName = '',
       this.query.createBy = ''
       this.query.begin = ''
@@ -193,7 +198,7 @@ export default {
   line-height: 80rpx;
   border: 1px solid #ccc;
   border-radius: 25px;
-  margin: 10rpx;
+  margin: 5rpx 10rpx;
   padding: 0 10rpx;
   width: 100%;
 }
@@ -247,7 +252,7 @@ export default {
   font-size: 30rpx;
 }
 .header{
-  height: 100rpx;
+  height: 85rpx;
   background: #fff;
   overflow: hidden;
 }
@@ -257,7 +262,7 @@ export default {
   flex-direction: column;
   overflow: auto;
   background: #fff;
-  padding: 20rpx 10rpx;
+  padding: 0 10rpx;
 }
 
 .footer{

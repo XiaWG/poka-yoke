@@ -70,7 +70,7 @@ import tTh from "@/components/t-table/t-th.vue";
 import tTr from "@/components/t-table/t-tr.vue";
 import tTd from "@/components/t-table/t-td.vue";
 import uniPopupDialog from '@/components/uni-popup/uni-popup-dialog.vue';
-import { materialInspectIPQCPatrol,  materialScanCheckStation } from '@/api/api.js'
+import { checkGrantIsIPQC, materialInspectIPQCPatrol,  materialScanCheckStation } from '@/api/api.js'
 export default {
   components: {
     tTable,
@@ -79,9 +79,12 @@ export default {
     tTd,
     uniPopupDialog
   },
+  props: {
+    option: Object
+  },
   data() {
     return {
-      option: {},
+      loginInfo: {},
       number: '',
       tempLock: false,
       mainList: [],
@@ -98,7 +101,7 @@ export default {
       IPQCInd: -1,
       showEng: false,
       dataNum: 0,
-      autoFocus: true,
+      autoFocus: false,
       IPQCLock: false,
       IPQCUser: null,
       scanedData: {
@@ -111,73 +114,94 @@ export default {
   onShow() {
     this.focus()
   },
-  onLoad(option) {
-    this.option = option
-    this.option.user = JSON.parse(option.user)
-  },
-  onReady() {
-    const title = `IPQC巡检-${this.option.productLine}-${this.option.name}-${this.option.user[0].userName}`
-    uni.setNavigationBarTitle({
-      title,
-    })
+  mounted () {
+    this.init()
   },
   computed: {
     placeholder () {
-      return this.curInput === 1 ? '请扫描站位条码' : '请扫描料盘条码'
+      return this.curInput === 1 ? '请扫描站位条码' : this.curInput === 9 ? '请输入账号' : '请扫描料盘条码'
     },
     curField () {
-      return this.curInput === 1 ? 'lz' : 'lp'
+      return this.curInput === 1 ? 'lz' : this.curInput === 9 ? 'user' : 'lp'
     }
   },
   methods: {
+    init () {
+      const xjUser = this.$store.state.ext.xjUser
+      if (xjUser.loginName) {
+        this.loginInfo = xjUser
+        this.$emit('login', xjUser.userName)
+      }
+      if (!this.loginInfo.userName) {
+        this.tempLock = true
+      } else {
+        this.tempLock = false
+      }
+    },
+    login () {
+      if (this.loginInfo.userName) {
+        uni.showModal({
+          showCancel: true,
+          title: "提示",
+          content: '确认退出嘛?',
+          success: (res) => {
+            if (res.confirm) {
+              this.loginInfo = {}
+              this.$store.commit('updateExtState', {
+                xjUser: this.loginInfo
+              })
+              this.$emit('login', '')
+              this.init()
+            }
+          },
+        })
+      } else {
+        this.curInput = 9
+        this.tempLock = false
+        this.focus()
+      }
+    },
     handleReset () {
+      if (!this.loginInfo.loginName) {
+        this.focus()
+        return
+      }
       this.scanedData.lz = ''
       this.scanedData.lp = ''
       this.reset()
     },
+
     changeFocus () {
       //#ifdef APP-PLUS
-      if (!this.showKeyboard) uni.hideKeyboard()
+      // if (!this.showKeyboard) uni.hideKeyboard()
       //#endif
     },
-    IPQCLogin (data) {
+
+    checkGrant (data) {
       uni.showLoading()
       checkGrantIsIPQC({
         grantCode: data
       }).then(res => {
         uni.hideLoading()
         if (res.code === 0) {
-          this.IPQCUser = res.data.loginName
-          this.IPQCLock = false
-          this.reset()
+          this.loginInfo = {
+            userName: res.data.userName,
+            loginName: res.data.loginName
+          }
+          this.$store.commit('updateExtState', {
+            xjUser: this.loginInfo
+          })
+          this.curInput = 1
+          this.$emit('login', res.data.userName)
         }
       })
     },
-    checkGrantIsEngineer (data) {
-      uni.showLoading()
-      checkGrantIsEngineer({
-        grantCode: data
-      }).then(res => {
-        uni.hideLoading()
-        if (res.code === 0) {
-          this.showEng = false
-          this.reset()
-        }
-      })
-    },
+    
     handleScan () {
       uni.scanCode({
         onlyFromCamera: true,
         scanType: ["qrCode"],
         success: (res) => {
-          if (this.IPQCLock) {
-            this.IPQCLogin(res.result)
-            return
-          }
-          if (this.showEng) {
-            this.checkGrantIsEngineer(res.result)
-            return
-          }
           this.handleGetScanData(res.result)
         },
         fail: (res) => {
@@ -204,6 +228,10 @@ export default {
         })
         return false
       }
+      if (this.curInput === 9) {
+        this.checkGrant(value)
+        return
+      }
       this.form[this.curField] = value
       this.scanedData.lz = ''
       this.scanedData.lp = ''
@@ -228,7 +256,7 @@ export default {
           lineName: this.option.productLine,
           stationName: this.form.lz,
           newBarcode: value,
-          createBy: this.option.user[0].loginName
+          createBy: this.loginInfo.loginName
         })
         uni.hideLoading()
         this.tempLock = false
@@ -267,22 +295,11 @@ export default {
         url,
       })
     },
+
+    submit () {
+
+    }
   },
-  onNavigationBarButtonTap(e) {
-    this.showKeyboard = !this.showKeyboard
-    uni.showToast({
-      title: this.showKeyboard ? '键盘开启' : '键盘关闭',
-      duration: 5000,
-      icon: "none",
-    })
-    this.changeFocus()
-	},
-  onShow () {
-    this.showKeyboard = false
-  },
-  onHide () {
-    this.showKeyboard = true
-  }
 };
 </script>
 
