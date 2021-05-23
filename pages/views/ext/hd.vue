@@ -130,11 +130,7 @@ export default {
     }
   },
   onShow() {
-    // for (var i =0 ;i< 100; i++) {
-    //   this.mainList.push({})
-    //   this.subList.push({})
-    // }
-    this.focus()
+    
   },
   computed: {
     placeholder () {
@@ -192,6 +188,9 @@ export default {
       if (hdUser.loginName) {
         this.loginInfo = hdUser
         this.$emit('login', hdUser.userName)
+        setTimeout(() => {
+          this.focus()
+        }, 100)
       }
       if (!this.loginInfo.userName) {
         this.tempLock = true

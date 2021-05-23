@@ -7,6 +7,7 @@
           :value="scanNumber"
           @confirm="(e) => handleGetScanData(e.target.value)"
           :placeholder="placeholder"
+          :focus="autoFocus"
           @focus="changeFocus"
           :auto-blur="false"
         />
@@ -41,8 +42,9 @@
 <script>
 import { checkGrant, checkProgramExist } from "@/api/api.js";
 export default {
-  data() {
+  data () {
     return {
+      autoFocus: false,
       programId: '',
       productLine: '',
       productName: '',
@@ -56,6 +58,10 @@ export default {
     const ext = this.$store.state.ext
     if (ext.programId && ext.productName && ext.productLine) {
       this.goToPage(`/pages/views/ext/main?programId=${ext.programId}&name=${ext.productName}&productLine=${ext.productLine}`)
+    } else {
+      setTimeout(() => {
+        this.focus()
+      }, 100)
     }
   },
   computed: {
@@ -81,6 +87,12 @@ export default {
     this.changeFocus()
 	},
   methods: {
+    focus () {
+      this.autoFocus = false
+      this.$nextTick(() => {
+        this.autoFocus = true
+      })
+    },
     changeFocus () {
       //#ifdef APP-PLUS
       if (!this.showKeyboard) uni.hideKeyboard()

@@ -187,6 +187,9 @@ export default {
       if (jlUser.loginName) {
         this.loginInfo = jlUser
         this.$emit('login', jlUser.userName)
+        setTimeout(() => {
+          this.focus()
+        }, 100)
       }
       if (!this.loginInfo.userName) {
         this.tempLock = true
