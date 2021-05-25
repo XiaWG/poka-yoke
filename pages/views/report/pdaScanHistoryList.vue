@@ -16,7 +16,7 @@
     </view>
     <view class="body">
       <scroll-view scroll-x scroll-y>
-        <t-table min-width="480px">
+        <t-table min-width="800px">
           <t-tr>
             <t-th :width="80">机种</t-th>
             <t-th :width="40">站位</t-th>
@@ -24,6 +24,10 @@
             <t-th :width="80">新盘</t-th>
             <t-th :width="60">操作人</t-th>
             <t-th :width="80">操作时间</t-th>
+            <t-th :width="60">提交人</t-th>
+            <t-th :width="80">提交时间</t-th>
+            <t-th :width="60">确认人</t-th>
+            <t-th :width="80">确认时间</t-th>
           </t-tr>
           <template v-if='mainList.length'>
             <t-tr 
@@ -47,6 +51,18 @@
               </t-td>
               <t-td :width="80">
                 {{ item.createTime }}
+              </t-td>
+              <t-td :width="60">
+                {{ item.updateBy }}
+              </t-td>
+              <t-td :width="80">
+                {{ item.updateTime }}
+              </t-td>
+              <t-td :width="60">
+                {{ item.confirmBy }}
+              </t-td>
+              <t-td :width="80">
+                {{ item.confirmTime }}
               </t-td>
             </t-tr>
           </template>
@@ -92,7 +108,7 @@
         <input class="queryInput"
           type="text"
           placeholder="请扫描或录入操作人"
-          v-model.trim="query.createBy"
+          v-model.trim="query.confirmBy"
         />        
       </view>
       <view style="padding: 20rpx;display:flex;flex-direction: row">
@@ -114,7 +130,7 @@
 
 <script>
 import uniCalendar from '@/components/uni-calendar/uni-calendar.vue'
-import { pdaScanHistoryList } from '@/api/api.js'
+import { pdaScanConfirmList } from '@/api/api.js'
 import tTable from "@/components/t-table/t-table.vue";
 import tTh from "@/components/t-table/t-th.vue";
 import tTr from "@/components/t-table/t-tr.vue";
@@ -137,8 +153,8 @@ export default {
         programName: '',
         lineName: '',
         stationName: '',
-        createBy: '',
-        type: '1'
+        confirmBy: '',
+        programId: ''
       },
       mainList: [
         
@@ -148,7 +164,7 @@ export default {
 
   mounted () {
     setTimeout(() => {
-      this.search({ select: 'top', type: '1' })
+      this.search({ select: 'top' })
     }, 100)
   },
 
@@ -159,7 +175,7 @@ export default {
     search (query) {
       this.$refs.popup.close()
       uni.showLoading()
-      pdaScanHistoryList(query).then(res => {
+      pdaScanConfirmList(query).then(res => {
         uni.hideLoading()
         this.mainList = res.rows
       })
@@ -169,7 +185,7 @@ export default {
       this.query.programName = ''
       this.query.lineName = '',
       this.query.stationName = '',
-      this.query.createBy = ''
+      this.query.confirmBy = ''
       this.query.begin = ''
       this.query.end = ''
       this.rangeTime = ''

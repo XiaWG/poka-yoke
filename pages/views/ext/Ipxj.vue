@@ -264,6 +264,7 @@ export default {
         uni.hideLoading()
         this.tempLock = false
         if (res && res.code === 0) {
+          this.$Voice('../../../static/music/OK.mp3')
           this.form.bd = 'yes'
         } else {
           this.form.bd = 'error'

@@ -96,25 +96,25 @@
 
     <view class="footer">
       <template v-if="IPQCLock">
-        <span class="button" @click="handleScan">
+        <button class="button" @click="handleScan">
           <image
             class="icon" 
             src='../../../static/icon/loginIn.png'
           /><br>
           请登入IPQC账号
-        </span>
+        </button>
       </template>
       <template v-if="showEng">
-        <span class="button" @click="handleScan">
+        <button class="button" @click="handleScan">
           <image
             class="icon" 
             src='../../../static/icon/loginIn.png'
           /><br>
           请登入工程师账号
-        </span>
+        </button>
       </template>
       <template v-if="!showEng && !IPQCLock">
-        <span
+        <button
           class="button"
           style="border-right: 1px solid #ccc"
           @click="loginOut"
@@ -124,7 +124,7 @@
             src='../../../static/icon/loginOut.png'
           /><br>
           登出
-        </span>
+        </button>
         <!-- <span
           class="button"
           style="border-left: 1px solid #ccc;border-right: 1px solid #ccc"
@@ -136,7 +136,7 @@
           /><br>
           IPQC巡检
         </span> -->
-        <span
+        <button
           class="button"
           @click="handleSubmit"
         >
@@ -145,7 +145,7 @@
             src='../../../static/icon/submit.png'
           /><br>
           提交
-        </span>
+        </button>
       </template>
     </view>
   </view>
@@ -347,7 +347,6 @@ export default {
           stationName: this.form.lz,
         })
         if (!res) {
-          console.log(2312)
           this.reset()
           return false
         }      
@@ -619,7 +618,7 @@ export default {
   background: #fff;
 
   .button{
-    background: #fff;
+    // background: #fff;
     border: 0;
     border-radius: 0;
     flex: 1;
@@ -635,6 +634,9 @@ export default {
       height: 40rpx;
       vertical-align: middle;    
     }
+  }
+  .button::after{
+    border: 0;
   }
 }
 

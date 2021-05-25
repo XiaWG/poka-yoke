@@ -26,7 +26,7 @@
       />
     </view>
     <view class="footer" v-if="!isReport">
-      <span
+      <button
         class="button"
         style="border-right: 1px solid #ccc"
         @click="handleLogin"
@@ -36,8 +36,8 @@
           src='../../../static/icon/loginOut.png'
         />
         登入/登出
-      </span>
-      <span
+      </button>
+      <button
         class="button"
         style="border-right: 1px solid #ccc"
         @click="handleSubmit"
@@ -47,8 +47,8 @@
           src='../../../static/icon/submit.png'
         />
         提交
-      </span>
-      <span
+      </button>
+      <button
         class="button"
       >
         <image
@@ -56,7 +56,7 @@
           src='../../../static/icon/submit.png'
         />
         状态栏
-      </span>
+      </button>
     </view>
     <movable-view 
       v-if="!noLogin"
@@ -80,7 +80,7 @@
 <script>
 import jl from './jl'
 import hd from './hd'
-import upLoadList from './pdaScanHistoryList'
+import upLoadList from './jilu'
 import Ipxj from './Ipxj'
 import {
   selectPdaScanConfirmInfo
@@ -299,7 +299,7 @@ export default {
   box-sizing: border-box;
 
   .button{
-    background: #fff;
+    // background: #fff;
     border: 0;
     border-radius: 0;
     flex: 1;
@@ -316,6 +316,9 @@ export default {
       vertical-align: middle;  
       margin-right: 10rpx;  
     }
+  }
+  .button::after{
+    border: 0;
   }
 }
 

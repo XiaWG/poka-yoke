@@ -360,20 +360,16 @@ export default {
         this.autoFocus = false
         // 调用后台接口
         uni.showLoading()
-        const res = this.IPQC ? await materialInspectIPQCScan({
-          programId: this.option.programId,
-          lineName: this.option.productLine,
-          stationName: this.form.lz,
-          oldBarcode: this.subList[this.IPQCInd].xptm,
-          newBarcode: value,
-          createBy: this.IPQCUser
-        }) : await materialInspectScan({
+        let errorMsg = ''
+        const res = await materialInspectScan({
           programId: this.option.programId,
           lineName: this.option.productLine,
           stationName: this.form.lz,
           oldBarcode: this.form.jptm,
           newBarcode: this.form.xptm,
           createBy: this.loginInfo.loginName
+        }).catch(res => {
+          errorMsg = res.data.msg || ''
         })
         uni.hideLoading()
         this.tempLock = false
@@ -399,13 +395,12 @@ export default {
         if (this.form.bd === 'yes') {
           this.$Voice('../../../static/music/OK.mp3')
           this.errNum = 0
-          this.IPQC ? Object.assign(this.subList[this.IPQCInd], this.form) : this.mainList.push({...this.form})
-          this.IPQC && this.subList.splice(this.IPQCInd, 1) && this.mainList.splice(this.IPQCInd, 1)
+          this.mainList.push({...this.form})          
           this.reset()
           this.$emit('getTip')
         } else {
           this.errNum ++
-          const content = this.errNum >= 3 ? '录入错误超过限制次数,请工程师解锁确认' : '物料错误，请重新扫描'
+          const content = this.errNum >= 3 ? `${errorMsg}(录入错误超过限制次数,请工程师解锁确认)` : errorMsg
           this.IPQC && this.errNum --
           uni.showModal({
             showCancel: false,
@@ -417,8 +412,9 @@ export default {
                   this.errNum = 0
                   this.showLoginEng()
                   // this.mainList.push({...this.form})
+                } else {
+                  this.reset()
                 }
-                this.reset()
               }
             },
           })
@@ -428,12 +424,12 @@ export default {
           const ind = this.mainList.findIndex(d => d.lz === value)
           this.IPQCInd = this.IPQC ? this.subList.findIndex(d => d.lz === value) : -1
           if (!this.IPQC && ind > -1) {
-            // uni.showToast({
-            //   title: '料站扫描重复,请重新扫描',
-            //   duration: 2000,
-            //   icon: "none",
-            // })
-            // return false
+            uni.showToast({
+              title: '料站扫描重复,请重新扫描',
+              duration: 2000,
+              icon: "none",
+            })
+            return false
           }
           if (this.IPQC && this.IPQCInd === -1) {
             uni.showToast({
@@ -494,9 +490,20 @@ export default {
             duration: 2000,
             icon: "none",
           })
-          this.query()
-          this.$emit('getTip')
+          setTimeout(() => {
+            this.query()
+            this.$emit('getTip')
+          }, 2000)          
         }
+
+        // 提交后自动登出
+        this.loginInfo = {}
+        this.$store.commit('updateExtState', {
+          jlUser: this.loginInfo
+        })
+        this.$emit('login', '')
+        this.tempLock = true
+
       }).finally(() => {
         uni.hideLoading()
       })
@@ -555,6 +562,7 @@ export default {
 
     showLoginEng () {
       this.curInput = 10
+      this.focus()
     }
 
   },

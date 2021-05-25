@@ -91,6 +91,12 @@ export const pdaScanHistoryList = (data) =>
     body: data,
   })
 
+export const pdaScanConfirmList = (data) =>
+  request("/pda/pdaOperation/pdaScanConfirmList", {
+    method: "post",
+    body: data,
+  })
+  
   
 export const materialScanCheckStation = (data) =>
   request("/pda/pdaOperation/materialScanCheckStation", {

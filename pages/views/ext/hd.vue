@@ -334,6 +334,7 @@ export default {
         this.autoFocus = false
         // 调用后台接口
         uni.showLoading()
+        let errorMsg = ''
         const res = await materialInspectIPQCScan({
           programId: this.option.programId,
           lineName: this.option.productLine,
@@ -341,6 +342,8 @@ export default {
           oldBarcode: this.subList[this.IPQCInd].xptm,
           newBarcode: value,
           createBy: this.loginInfo.loginName
+        }).catch(res => {
+          errorMsg = res.data.msg || ''
         })
         uni.hideLoading()
         this.tempLock = false
@@ -372,7 +375,7 @@ export default {
           this.$emit('getTip')
         } else {
           this.errNum ++
-          const content = this.errNum >= 3 ? '录入错误超过限制次数,请工程师解锁确认' : '物料错误，请重新扫描'
+          const content = this.errNum >= 3 ? `${errorMsg}(录入错误超过限制次数,请工程师解锁确认)` : errorMsg
           this.IPQC && this.errNum --
           uni.showModal({
             showCancel: false,

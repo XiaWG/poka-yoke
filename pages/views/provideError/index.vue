@@ -38,13 +38,13 @@
     </view>    
     
     <view class="footer">
-      <span class="button" @click="reset">
+      <button class="button" @click="reset">
         <image
           class="icon" 
           src='../../../static/icon/replace.png'
         />
         重置
-      </span>
+      </button>
     </view>
   </view>
 </template>
@@ -262,7 +262,7 @@ export default {
   border-top: 1px solid #ccc;
 
   .button{
-    background: #fff;
+    // background: #fff;
     border: 0;
     border-radius: 0;
     flex: 1;
@@ -278,6 +278,9 @@ export default {
       vertical-align: middle;
       margin-right: 20rpx;
     }
+  }
+  .button::after{
+    border: 0;
   }
 }
 </style>

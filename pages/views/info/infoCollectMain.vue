@@ -17,14 +17,17 @@
         <uni-icons
           type="scan"
           class="scan"
-          size="40"
+          size="30"
           @click="handleScan"
         />
       </view>
-      <view class="title" style="font-weight: normal;width: 100%; overflow: auto">
+      <view class="title" style="font-weight: normal;width: 100%; overflow: auto;padding-right: 50px">
         <view style="white-space: nowrap">
           料站: {{ scanedData.lz || '--' }}
           条码: {{ scanedData.yptm || '--' }}
+        </view>        
+        <view class="btn" @click="handleReset">
+          重置
         </view>
       </view>
     </view>
@@ -85,17 +88,18 @@
       </scroll-view>      
     </view>
     <view class="footer">
-      <span
+      <button
         class="button"
         @click="handleReplace((curInput !== 3)), handleReplace2()"
+        style="border-right: 1px solid #ccc"
       >
         <image
           class="icon" 
           src='../../../static/icon/replace.png'
-        /><br>
+        />
         {{ curInput === 3 ? '录入主料' : '录入替代料'}}
-      </span>
-      <span
+      </button>
+      <!-- <span
         class="button"
         style="border-left: 1px solid #ccc;border-right: 1px solid #ccc"
         @click="handleCombine"
@@ -103,19 +107,19 @@
         <image
           class="icon" 
           src='../../../static/icon/combine.png'
-        /><br>
+        />
         聚合/不聚合
-      </span>
-      <span
+      </span> -->
+      <button
         class="button"
         @click="handleSubmitAll"
       >
         <image
           class="icon" 
           src='../../../static/icon/submit.png'
-        /><br>
+        />
         提交
-      </span>
+      </button>
     </view>
 
     <uni-popup ref="popup" type="center" :maskClick="false">
@@ -127,7 +131,7 @@
           料站
         </view>
         <view class="value">
-          <input
+          <easyinput
             v-model="form.lz"
             placeholder="请输入"
           />
@@ -138,7 +142,7 @@
           原盘条码
         </view>
         <view class="value">
-          <input
+          <easyinput
             v-model="form.yptm"
             placeholder="请输入"
           />
@@ -149,7 +153,7 @@
           规格
         </view>
         <view class="value">
-          <input
+          <easyinput
             v-model="form.gg"
             placeholder="请输入"
           />
@@ -160,7 +164,7 @@
           封装
         </view>
         <view class="value">
-          <input
+          <easyinput
             v-model="form.fz"
             placeholder="请输入"
           />
@@ -171,7 +175,7 @@
           精度
         </view>
         <view class="value">
-          <input
+          <easyinput
             v-model="form.jd"
             placeholder="请输入"
           />
@@ -182,14 +186,17 @@
           耐压
         </view>
         <view class="value">
-          <input
+          <easyinput
             v-model="form.ny"
             placeholder="请输入"
           />
         </view>
       </view>
       <view class="row">
-        <button type="primary" size="mini" style="width:100%" @click="handleSubmit">
+        <button type="warn" size="default" style="width:100%" @click="$refs.popup.close()">
+          取消
+        </button>
+        <button type="primary" size="default" style="width:100%" @click="handleSubmit">
           确认
         </button>
       </view>
@@ -221,11 +228,11 @@
 </template>
 
 <script>
+import easyinput from "@/components/uni-easyinput/uni-easyinput.vue";
 import tTable from "@/components/t-table/t-table.vue";
 import tTh from "@/components/t-table/t-th.vue";
 import tTr from "@/components/t-table/t-tr.vue";
 import tTd from "@/components/t-table/t-td.vue";
-import uniPopupDialog from '@/components/uni-popup/uni-popup-dialog.vue';
 import { partDataDetailByPartNo, programCollection, pdaProgramDetailList, deleteProgramDetailById } from '@/api/api.js'
 
 export default {
@@ -234,7 +241,7 @@ export default {
     tTh,
     tTr,
     tTd,
-    uniPopupDialog
+    easyinput
   },
   data() {
     return {
@@ -453,6 +460,14 @@ export default {
     },
 
     handleSubmit () {
+      if (!this.form.lz || !this.form.yptm) {
+        uni.showToast({
+          title: '料站,条码不能为空',
+          duration: 2000,
+          icon: "none",
+        })
+        return
+      }
       this.mainList.splice(this.curIndex, 1, {...this.form})
       this.curIndex = null
       this.$refs.popup.close()
@@ -519,7 +534,14 @@ export default {
       this.curInput = 1
     },
 
+    handleReset () {
+      this.scanedData.lz = ''
+      this.scanedData.yptm = ''
+      this.reset()
+    },
+
     focus () {
+      this.autoFocus = false
       this.$nextTick(() => {
         this.autoFocus = true
       })
@@ -555,21 +577,35 @@ export default {
   flex-direction: row;
   border-bottom: 1px solid #ccc;
   background: #fff;
-  line-height: 100rpx;
-  height: 100rpx;
+  line-height: 80rpx;
+  height: 80rpx;
 }
 .scanInput{
-  height: 100rpx;
+  height: 80rpx;
   flex: 1;
   padding: 0 10rpx;
 }
 .title{
+  height: 80rpx;
+  line-height: 80rpx;
   background: #fff;
   flex-direction: column;
-  padding: 30rpx 10rpx;
+  padding: 0 10rpx;
   border-left: 20rpx solid #808ce3;
-  font-weight: bold;
   border-bottom: 1px solid #ccc;
+  font-weight: bold;
+
+  .btn{
+    position: absolute;
+    right: 0;
+    background: #1890ff;
+    width: 50px;
+    height: 78rpx;
+    text-align: center;
+    color: #fff;
+    justify-content: center;
+    font-size: 15px;
+  }
 }
 .btn button{
   margin: 10rpx;
@@ -608,7 +644,7 @@ export default {
   font-size: 30rpx;
 }
 .header{
-  height: 320rpx;
+  height: 242rpx;
   overflow: hidden;
   background: #fff;
   flex-direction: column;
@@ -619,31 +655,36 @@ export default {
   flex-direction: column;
   overflow: auto;
   background: #fff;
-  padding: 20rpx 10rpx;
+  padding: 0 10rpx;
 }
 
 .footer{
-  height: 150rpx;
+  height: 80rpx;
   border-top: 1px solid #ccc;
   box-sizing: border-box;
 
   .button{
-    background: #fff;
+    // background: #fff;
     border: 0;
     border-radius: 0;
     flex: 1;
     text-align: center;
-    height: 150rpx;
+    height: 80rpx;
     font-size: 30rpx;
     font-weight: normal;
-    padding: 24rpx;
+    padding: 14rpx;
     box-sizing: border-box;
 
     .icon{
       width: 40rpx;
       height: 40rpx;
-      vertical-align: middle;    
+      vertical-align: middle;  
+      margin-right: 10rpx;  
     }
+  }
+
+  .button::after{
+    border: 0;
   }
 }
 

@@ -57,33 +57,33 @@ export default (url, options = {}) => {
 				if ([0, 301].includes(res.data.code)) {
 					resolve(res.data)
 				} else {
-					reject(res)
+					if (res.data) {
+						$warning()
+						const errorMsg = res.data.msg
+						uni.showToast({
+							title: errorMsg,
+							duration: 5000,
+							icon: 'none',
+							position: 'top'
+						})				
+						reject(res)
+					} else {
+						uni.showToast({
+							title: '网络错误，请重试！',
+							duration: 2000,
+							icon: 'none',
+						})
+					}
 				}
 			},
 			fail: (error) => {
-				reject(error);
-			}
-		});
-	}).catch((error) => {
-		if (error.data) {
-			const errorMsg = error.data.msg
-			if (error.statusCode === 401 || error.statusCode === 403) {
-				// 验证不通过，重新登录 跳转登录页
-			} else {
-				$warning() 
 				uni.showToast({
-					title: errorMsg,
-					duration: 5000,
+					title: '网络错误，请重试！',
+					duration: 2000,
 					icon: 'none',
-					position: 'top'
 				})
+				reject(error)
 			}
-		} else {
-			uni.showToast({
-				title: '网络错误，请重试！',
-				duration: 2000,
-				icon: 'none',
-			});
-		}
-	});
+		})
+	})
 }
