@@ -109,7 +109,6 @@ export default {
         x: 375,
         y: 50,
       },
-      timer: null,
       jlListLength: 0,
       hdListLength: 0
     }
@@ -228,7 +227,6 @@ export default {
   },
   onNavigationBarButtonTap(e) {
     if (e.index === 0) {
-      clearInterval(this.timer)
       uni.reLaunch({ // 返回主页
         url: '/pages/menu/menu'
       })
@@ -248,7 +246,6 @@ export default {
               productName: '',
               productLine: ''
             })
-            clearInterval(this.timer)
             uni.navigateTo({
               url: '/pages/views/ext/index'
             })

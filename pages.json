@@ -253,6 +253,13 @@
 							"fontSize": "24px",
 							"fontSrc": "/static/font/iconfont.ttf",
 							"text": "\ue67c"
+						}, {
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "right",
+							"fontSize": "24px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue75e"
 						}]
 					}  
 				}

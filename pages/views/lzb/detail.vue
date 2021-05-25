@@ -172,9 +172,13 @@ export default {
   },
 
   onNavigationBarButtonTap(e) {
-    uni.navigateTo({
-      url: `/pages/views/info/materailStationForm?programId=${this.option.id}&programName=${this.option.name}&curLine=${this.option.curLine}`,
-    })
+    if (e.index === 0) {
+      uni.navigateTo({
+        url: `/pages/views/info/materailStationForm?programId=${this.option.id}&programName=${this.option.name}&curLine=${this.option.curLine}`,
+      })
+    } else if (e.index === 1) {
+      this.$store.commit('showKeyboard/SET_KEYBOARD_TIMER', true)
+    }
 	},
   
 }
