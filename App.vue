@@ -7,10 +7,12 @@ export default {
     
   },
   onShow: function () {
-    // console.log('App Show')
+    console.log('onShow')
+    store.commit('showKeyboard/SET_KEYBOARD_TIMER')
   },
   onHide: function () {
-    // console.log('App Hide')
+    console.log('onHide')
+    store.commit('showKeyboard/SET_KEYBOARD_TIMER_CLEAR')
   },
 };
 </script>

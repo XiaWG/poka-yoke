@@ -109,7 +109,6 @@ export default {
         x: 375,
         y: 50,
       },
-      showKeyboard: false,
       timer: null,
       jlListLength: 0,
       hdListLength: 0
@@ -150,7 +149,6 @@ export default {
     this.option = option
   },
   onShow () {
-    this.setTimer()
     this.getJLData()
     this.getHDData()
   },
@@ -168,14 +166,6 @@ export default {
     handleGetTip () {
       this.getJLData()
       this.getHDData()
-    },
-    setTimer () {
-      clearInterval(this.timer)
-      this.timer = this.showKeyboard ? null : setInterval(() => {
-        //#ifdef APP-PLUS
-        uni.hideKeyboard()
-        //#endif
-      }, 10)
     },
     getJLData () {
       selectPdaScanConfirmInfo({
@@ -244,13 +234,7 @@ export default {
       })
     }
     if (e.index === 1) { // 键盘
-      this.showKeyboard = !this.showKeyboard
-      uni.showToast({
-        title: this.showKeyboard ? '键盘开启' : '键盘关闭',
-        duration: 5000,
-        icon: "none",
-      })
-      this.setTimer()
+      this.$store.commit('showKeyboard/SET_KEYBOARD_TIMER', true)
     }
     if (e.index === 2) { // 切换
       uni.showModal({

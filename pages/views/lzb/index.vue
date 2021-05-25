@@ -258,7 +258,10 @@ export default {
       this.login.password = ''
       this.$refs.login_popup.close()
     }
-  }
+  },
+  onNavigationBarButtonTap(e) {
+    this.$store.commit('showKeyboard/SET_KEYBOARD_TIMER', true)
+	},
   
 }
 </script>

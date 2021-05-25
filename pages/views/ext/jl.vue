@@ -125,7 +125,6 @@ export default {
         jptm: '',
         xptm: ''
       },
-      showKeyboard: false
     };
   },
   mounted () {
@@ -223,6 +222,7 @@ export default {
     },
 
     handleReset () {
+      if (this.tempLock) return
       if (!this.loginInfo.loginName) {
         this.focus()
         return

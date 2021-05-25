@@ -119,7 +119,6 @@ export default {
         jptm: '',
         xptm: ''
       },
-      showKeyboard: false
     };
   },
   mounted () {
@@ -222,11 +221,12 @@ export default {
       }
     },
     handleReset () {
+      if (this.tempLock) return
       if (!this.loginInfo.loginName) {
         this.focus()
         return
       }
-      this.reset()
+      this.reset(true)
     },
     changeFocus () {
       //#ifdef APP-PLUS
@@ -425,11 +425,11 @@ export default {
       }, 2000)     
     },
     
-    reset () {
+    reset (notip) {
       this.form.lz = ''
       this.form.jptm = ''
       this.form.xptm = ''
-      if (this.IPQC && this.subList.length === 0) {
+      if (!notip && this.IPQC && this.subList.length === 0) {
         uni.showToast({
           title: `确认结束,成功${this.dataNum}盘`,
           duration: 5000,

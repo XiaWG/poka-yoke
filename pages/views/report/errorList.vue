@@ -176,7 +176,10 @@ export default {
       this.query.end = e.range.after
       this.rangeTime = e.range.before + '~' +  e.range.after
     }
-  }
+  },
+  onNavigationBarButtonTap(e) {
+    this.$store.commit('showKeyboard/SET_KEYBOARD_TIMER', true)
+	},
   
 }
 </script>

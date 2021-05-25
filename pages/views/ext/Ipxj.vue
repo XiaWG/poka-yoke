@@ -108,7 +108,6 @@ export default {
         lz: '',
         lp: ''
       },
-      showKeyboard: false
     };
   },
   onShow() {
@@ -165,6 +164,7 @@ export default {
       }
     },
     handleReset () {
+      if (this.tempLock) return
       if (!this.loginInfo.loginName) {
         this.focus()
         return

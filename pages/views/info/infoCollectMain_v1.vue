@@ -261,7 +261,6 @@ export default {
         lz: '',
         yptm: ''
       },
-      showKeyboard: false
     };
   },
   onShow() {
@@ -291,7 +290,7 @@ export default {
   methods: {
     changeFocus () {
       //#ifdef APP-PLUS
-      if (!this.showKeyboard) uni.hideKeyboard()
+      // if (!this.showKeyboard) uni.hideKeyboard()
       //#endif
     },
     async handleGetScanData (value, field) {
@@ -484,20 +483,8 @@ export default {
 
   },
   onNavigationBarButtonTap(e) {
-    this.showKeyboard = !this.showKeyboard
-    uni.showToast({
-      title: this.showKeyboard ? '键盘开启' : '键盘关闭',
-      duration: 5000,
-      icon: "none",
-    })
-    this.changeFocus()
+    this.$store.commit('showKeyboard/SET_KEYBOARD_TIMER', true)
 	},
-  onShow () {
-    this.showKeyboard = false
-  },
-  onHide () {
-    this.showKeyboard = true
-  }
 };
 </script>
 

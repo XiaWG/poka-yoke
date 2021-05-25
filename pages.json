@@ -163,7 +163,19 @@
 			"style": {
 				"navigationBarTitleText": "上料记录",
 				"onReachBottomDistance": 200,
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"app-plus": { 
+					"titleNView": {
+						"buttons": [{
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "right",
+							"fontSize": "24px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue75e"
+						}]
+					}  
+				}
 			}
 		},
 		{
@@ -211,7 +223,19 @@
 			"style": {
 				"navigationBarTitleText": "料站表",
 				"onReachBottomDistance": 200,
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"app-plus": { 
+					"titleNView": {
+						"buttons": [{
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "right",
+							"fontSize": "24px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue75e"
+						}]
+					}  
+				}
 			}
 		},
 		{
@@ -239,7 +263,19 @@
 			"style": {
 				"navigationBarTitleText": "错误记录",
 				"onReachBottomDistance": 200,
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"app-plus": { 
+					"titleNView": {
+						"buttons": [{
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "right",
+							"fontSize": "24px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue75e"
+						}]
+					}  
+				}
 			}
 		},
 		{
@@ -247,7 +283,19 @@
 			"style": {
 				"navigationBarTitleText": "巡检记录",
 				"onReachBottomDistance": 200,
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"app-plus": { 
+					"titleNView": {
+						"buttons": [{
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "right",
+							"fontSize": "24px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue75e"
+						}]
+					}  
+				}
 			}
 		},
 		{

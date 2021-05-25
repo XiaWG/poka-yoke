@@ -3,8 +3,7 @@ import Vuex from 'vuex';
 import i18n from '@/i18n'
 import { getLang } from '@/utils/util.js'
 Vue.use(Vuex);
-import v1 from './v1.js';
-import { getNewNum } from "../api/remote";
+import showKeyboard from './showKeyboard.js';
 
 const lang = uni.getStorageSync('lang') || getLang();
 const langPack = Object.assign({}, i18n[lang])
@@ -44,7 +43,7 @@ export default new Vuex.Store({
 		}
 	},
 	modules: {
-		v1,
+		showKeyboard,
 	},
 	mutations: {
 		updateState(state, payload) {
