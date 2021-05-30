@@ -25,7 +25,19 @@
 		{
 			"path": "pages/login/servconfig",
 			"style": {
-				"navigationBarTitleText": "服务器配置"
+				"navigationBarTitleText": "服务器配置",
+				"app-plus": { 
+					"titleNView": {
+						"buttons": [{
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "right",
+							"fontSize": "30px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue75e"
+						}]
+					}  
+				}
 			}
 		},
 		{
@@ -91,6 +103,13 @@
 				"app-plus": { 
 					"titleNView": {
 						"buttons": [{
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "left",
+							"fontSize": "24px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue655"
+						}, {
 							"colorPressed": "#fff",
 							"fontWeight": "bold",
 							"float": "right",

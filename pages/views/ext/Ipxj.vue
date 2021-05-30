@@ -136,6 +136,9 @@ export default {
       }
       if (!this.loginInfo.userName) {
         this.tempLock = true
+        setTimeout(() => {
+          this.login()
+        }, 100)
       } else {
         this.tempLock = false
       }
@@ -266,6 +269,7 @@ export default {
         if (res && res.code === 0) {
           this.$Voice('../../../static/music/OK.mp3')
           this.form.bd = 'yes'
+          this.form.lp = res.msg
         } else {
           this.form.bd = 'error'
         }

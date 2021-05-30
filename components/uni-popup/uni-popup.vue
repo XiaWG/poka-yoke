@@ -344,7 +344,8 @@
 		height: 500px;
 		background-color: #fff;
 		/* #ifndef APP-NVUE */
-		display: block;
+		display: flex;
+		flex-direction: column;
 		/* #endif */
 		position: relative;
 		/* iphonex 等安全区设置，底部安全区适配 */

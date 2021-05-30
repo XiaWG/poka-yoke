@@ -1,255 +1,215 @@
 <template>
-  <view style="display: flex;flex-direction: column; flex: 1; width: 100%; height: 100%">
-    <view class="header">
-      <view class="scanBox" @click="handleClick">
-        <input
-          class="scanInput"
-          :disabled="true"
-          placeholder="请输入查询条件"
-        />
-        <uni-icons
-          type="search"
-          class="scan"
-          size="30"
-        />
+  <movable-area style="display: flex; flex-direction: column; flex: 1; width: 100%;height: 100%">
+    <view class="header" style="overflow: auto">
+      <view class="tab">
+        <view
+          v-for="(item, index) in tabs"
+          :key="index"
+          :class="['tab-item', index === active ? 'active' : '']"
+          @click="handleTab(item, index)"
+        >
+          <view v-if="item.tip && item.num > 0" class="tip">
+            {{ item.num > 99 ? '99+' : item.num }}
+          </view>
+          {{ item.title }}
+        </view>
       </view>
     </view>
     <view class="body">
-      <scroll-view scroll-x scroll-y>
-        <t-table min-width="470px">
-          <t-tr>
-            <t-th :width="80">机种</t-th>
-            <t-th :width="40">站位</t-th>
-            <t-th :width="60">操作人</t-th>
-            <t-th :width="80">操作时间</t-th>
-            <t-th :width="150">错误信息</t-th>
-          </t-tr>
-          <template v-if='mainList.length'>
-            <t-tr 
-              v-for="(item, index) in mainList" 
-              :key="index"
-            >
-              <t-td :width="80">
-                {{ item.programName }}
-              </t-td>
-              <t-td :width="40">
-                {{ item.stationName }}
-              </t-td>
-              <t-td :width="60">
-                {{ item.createBy }}
-              </t-td>
-              <t-td :width="80">
-                {{ item.createTime }}
-              </t-td>
-              <t-td :width="150">
-                {{ item.scanInfo }}
-              </t-td>
-            </t-tr>
-          </template>
-          <tr v-else style="height:168px">
-            <view class="no-data">{{ $t("lang.ot.app.noData") }}</view>
-          </tr>
-        </t-table>
-      </scroll-view>
-    </view>
-
-    <uni-popup class="list-dialog" ref="popup" type="fullScreen">
-      <view @click="$refs.calendar.open()">
-        <input 
-          class="queryInput"
-          type="text"
-          placeholder="请选择操作时间"
-          v-model.trim="rangeTime"
-        />
-      </view>
-      <view>
-        <input 
-          class="queryInput"
-          type="text"
-          placeholder="请扫描或录入程序名称"
-          v-model.trim="query.programName"
-        />
-      </view>
-      <view>
-        <input class="queryInput"
-          type="text"
-          placeholder="请扫描或录入线体名称"
-          v-model.trim="query.lineName"
-        />        
-      </view>
-      <view>
-        <input class="queryInput"
-          type="text"
-          placeholder="请扫描或录入站位名称"
-          v-model.trim="query.stationName"
-        />        
-      </view>
-      <view>
-        <input class="queryInput"
-          type="text"
-          placeholder="请扫描或录入操作人"
-          v-model.trim="query.createBy"
-        />        
-      </view>
-      <view style="padding: 20rpx;display:flex;flex-direction: row">
-        <span class="searchBtn" style="background: #24bb24" @click="search(query)">确认</span>
-        <span class="searchBtn" style="background: #007aff" @click="reset">重置</span>
-        <span class="searchBtn" style="background: red" @click="$refs.popup.close()">取消</span>
-      </view>
-      <uni-calendar 
-        ref="calendar"
-        :insert="false"
-        :lunar="true"
-        :range="true"
-        @confirm="handleChange"
+      <components 
+        ref="com"
+        :is="curComponent"
+        :option="option"
+        @login="setLogin"
+        @submit="handleSetSubList"
+        @getTip="handleGetTip"
       />
-    </uni-popup>
-  
-  </view>
+    </view>
+    <view class="footer" v-if="!isReport">
+      <button
+        class="button"
+        style="border-right: 1px solid #ccc"
+        @click="handleLogin"
+      >
+        <image
+          class="icon" 
+          src='../../../static/icon/loginOut.png'
+        />
+        登入/登出
+      </button>
+      <button
+        class="button"
+        style="border-right: 1px solid #ccc"
+        @click="handleSubmit"
+      >
+        <image
+          class="icon" 
+          src='../../../static/icon/submit.png'
+        />
+        提交
+      </button>
+      <button
+        class="button"
+      >
+        <image
+          class="icon" 
+          src='../../../static/icon/submit.png'
+        />
+        状态栏
+      </button>
+    </view>
+    <movable-view 
+      v-if="!noLogin"
+      :x="x" :y="y" direction="all" @change="onChange"
+      class="movable-view"
+      :style="{width: userWidth}"
+      @click="handleToggleUser"
+    >
+      <view style="background: #fff;border-radius: 50%">
+        <span 
+          :class="['iconfont', logined ? 'logined' : 'un-logined']"
+        >&#xe65a;</span>
+      </view>
+      <view class="login-user">
+        {{ loginInfo.userName || '未登录' }}
+      </view>
+    </movable-view>
+  </movable-area>
 </template>
 
 <script>
-import uniCalendar from '@/components/uni-calendar/uni-calendar.vue'
-import { pdaScanHistoryList } from '@/api/api.js'
-import tTable from "@/components/t-table/t-table.vue";
-import tTh from "@/components/t-table/t-th.vue";
-import tTr from "@/components/t-table/t-tr.vue";
-import tTd from "@/components/t-table/t-td.vue";
-
+import sl from './errorList_1'
+import hl from './errorList_2'
+import xj from './errorList_3'
+import {
+  selectPdaScanConfirmInfo
+} from '@/api/api.js'
 export default {
   components: {
-    uniCalendar,
-    tTable,
-    tTh,
-    tTr,
-    tTd,
+    sl,
+    hl,
+    xj,
   },
-  data() {
+  data () {
     return {
-      rangeTime: '',
-      query: {
-        begin: '',
-        end: '',
-        programName: '',
-        lineName: '',
-        stationName: '',
-        createBy: '',
-        type: '0'
+      isReport: false,
+      noLogin: false,
+      loginInfo: {
+        userName: ''
       },
-      mainList: [
-        
-      ]
+      userWidth: '40px',      
+      active: 0,
+      curComponent: '',
+      option: {},
+      x: 375,
+      y: 50,
+      old: {
+        x: 375,
+        y: 50,
+      },
+      jlListLength: 0,
+      hdListLength: 0
     }
   },
-
-  mounted () {
-    // this.query.createTime = this.$formatterTime(new Date(), false, 1)
-    setTimeout(() => {
-      this.search({ select: 'top', type: '0' })
-    }, 1000)
-  },
-
-  methods: {
-    handleClick () {
-      this.$refs.popup.open()
+  computed: {
+    tabs () {
+      return [
+        {
+          title: '上料',
+          page: 'sl',
+          isReport: true,
+          noLogin: true
+        },
+        {
+          title: '核料',
+          page: 'hl',
+          isReport: true,
+          noLogin: true
+        },
+        {
+          title: '巡检',
+          page: 'xj',
+          isReport: true,
+          noLogin: true
+        },
+      ]
     },
-    search (query) {
-      this.$refs.popup.close()
-      uni.showLoading()
-      pdaScanHistoryList(query).then(res => {
-        uni.hideLoading()
-        this.mainList = res.rows
+    logined () {
+      return !!this.loginInfo.userName
+    }
+  },
+  onLoad (option) {
+    this.option = option
+  },
+  onShow () {
+    
+  },
+  mounted () {
+    this.active = 0
+    this.curComponent = this.tabs[0].page
+    this.isReport = this.tabs[0].isReport
+    this.noLogin = this.tabs[0].noLogin
+  },
+  onReady() {
+    
+  },
+  methods: {
+    handleGetTip () {
+      
+    },
+    handleToggleUser () {
+      this.x = this.old.x
+      this.y = this.old.y
+      this.userWidth = this.userWidth === '40px' ? '120px' : '40px'
+    },
+    tap: function(e) {
+      this.x = this.old.x
+      this.y = this.old.y
+      this.$nextTick(function() {
+        this.x = 30
+        this.y = 30
       })
     },
-    reset () {
-      // this.query.createTime = this.$formatterTime(new Date(), false, 1)
-      this.query.programName = ''
-      this.query.lineName = '',
-      this.query.stationName = '',
-      this.query.createBy = ''
-      this.query.begin = ''
-      this.query.end = ''
-      this.rangeTime = ''
+    onChange: function(e) {
+      this.old.x = e.detail.x
+      this.old.y = e.detail.y
     },
-    handleChange (e) {
-      this.query.begin = e.range.before
-      this.query.end = e.range.after
-      this.rangeTime = e.range.before + '~' +  e.range.after
+    handleTab (item, index) {
+      this.loginInfo.userName = ''
+      this.active = index
+      this.curComponent = item.page
+      this.isReport = item.isReport
+      this.noLogin = item.noLogin
+    },
+    handleLogin () {
+      this.$refs.com.login()
+    },
+    handleSubmit () {
+      this.$refs.com.submit()
+    },
+    setLogin (data) {
+      this.loginInfo.userName = data
+    },
+    handleSetSubList (data) {
+      this.option.subList = data
     }
   },
   onNavigationBarButtonTap(e) {
-    this.$store.commit('showKeyboard/SET_KEYBOARD_TIMER', true)
+    if (e.index === 0) { // 键盘
+      this.$store.commit('showKeyboard/SET_KEYBOARD_TIMER', true)
+    }
 	},
-  
 }
 </script>
 
 <style lang="scss">
-.scanBox{
-  flex-direction: row;
-  border-bottom: 1px solid #ccc;
-  background: #fff;
-  height: 80rpx;
-  line-height: 80rpx;
-  border: 1px solid #ccc;
-  border-radius: 25px;
-  margin: 10rpx;
-  padding: 0 10rpx;
-  width: 100%;
-}
-.scanInput{
-  height: 80rpx;
-  flex: 1;
-  padding: 0 10rpx;
-}
-.title{
+
+.header{
+  height: 90rpx;
+  overflow: hidden;
   background: #fff;
   flex-direction: column;
-  padding: 30rpx 10rpx;
-  border-left: 20rpx solid #808ce3;
-  font-weight: bold;
-  border-bottom: 1px solid #ccc;
-}
-.btn button{
-  margin: 10rpx;
-}
-.active {
-  background: #f5f5f5
-}
-
-.row{
-  flex: 1;
-  margin-bottom: 20rpx;
-  padding: 0 20rpx;
-  font-size: 30rpx;
-}
-.pop_title{
-  border-bottom: 1px solid #ccc; 
-  justify-content: center; 
-  padding: 20rpx;
-  font-size: 40rpx;
-}
-.label{
-  width: 150rpx;
   justify-content: flex-end;
-  height: 50rpx;
-  line-height: 50rpx;
-  padding-right: 30rpx;
-}
-.value{
-  flex-grow: 1;
-}
-.value input{
-  flex: 1;
-  border-bottom: 1px solid #ccc;
-  height: 50rpx;
-  padding: 10rpx;
-  font-size: 30rpx;
-}
-.header{
-  height: 100rpx;
-  background: #fff;
-  overflow: hidden;
 }
 
 .body{
@@ -257,31 +217,34 @@ export default {
   flex-direction: column;
   overflow: auto;
   background: #fff;
-  padding: 20rpx 10rpx;
 }
 
 .footer{
-  flex-grow: 0;
+  height: 80rpx;
   border-top: 1px solid #ccc;
   box-sizing: border-box;
 
   .button{
-    background: #fff;
+    // background: #fff;
     border: 0;
     border-radius: 0;
     flex: 1;
     text-align: center;
-    height: 150rpx;
+    height: 80rpx;
     font-size: 30rpx;
     font-weight: normal;
-    padding: 24rpx;
+    padding: 14rpx;
     box-sizing: border-box;
 
     .icon{
       width: 40rpx;
       height: 40rpx;
-      vertical-align: middle;    
+      vertical-align: middle;  
+      margin-right: 10rpx;  
     }
+  }
+  .button::after{
+    border: 0;
   }
 }
 
@@ -291,22 +254,83 @@ export default {
   margin: 0 10rpx;
 }
 
-.searchBtn{
-  width: 100%;
-  border-radius: 10px;
-  height: 40px;
-  line-height: 40px;
-  text-align: center;
-  margin: 5px;
-  color: #fff;
+.tab{
+  flex-direction: row;
+  height: 80rpx;
+  line-height: 80rpx;
+  border-bottom: 2px solid #ccc;
+  position: relative;
+  // margin-top: 10rpx;
+
+  .tab-item{
+    padding: 0 30rpx;
+    border: 2px solid transparent;
+    border-top-right-radius: 10rpx;
+    border-top-left-radius: 10rpx;
+    white-space:nowrap;
+    position: relative;
+
+    .tip{
+      position: absolute;
+      top: -5px;
+      right: -10px;
+      background: red;
+      color: #fff;
+      width: 30px;
+      height: 20px;
+      border-radius: 10px;
+      line-height: 20px;
+      font-size: 12px;
+      justify-content: center;
+      // z-index: 1;
+    }
+  }
+
+  .tab-item.active{
+    border: 2px solid #ccc;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    background: #fff;
+    color: #1890ff
+  }
 }
-.queryInput{
-  border: 1px solid #ccc;
-  width: 100%;
-  margin: 10px;
+
+.movable-view{
+  min-width: 40px;
+  min-height: 40px;
+  // border: 1px solid #ccc;
+  border-radius: 40px;
+  box-shadow: 0px 0px 5px #1890ff;
+  white-space:nowrap;
+  display: flex;
+  flex-direction: row;
+  line-height: 40px;
+  transition: width .5s;
+  background: #fff;
+  overflow: hidden;
+}
+
+.iconfont{
+  width: 40px;
   height: 40px;
-  padding: 0 10px;
-  border-radius: 10px;
+  font-size: 30px;
+  text-align: center;
+  line-height: 40px;
+}
+
+.logined{
+  color: green;
+}
+
+.un-logined{
+  color: #ccc;
+}
+
+.login-user{
+  display: inline-block;
+  width: 80px;
+  height: 100%;
+  text-align: center;
+  color: #ccc;
 }
 </style>
-

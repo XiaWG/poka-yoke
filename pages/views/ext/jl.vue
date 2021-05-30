@@ -192,6 +192,9 @@ export default {
       }
       if (!this.loginInfo.userName) {
         this.tempLock = true
+        setTimeout(() => {
+          this.login()
+        }, 100)
       } else {
         this.tempLock = false
       }
@@ -271,6 +274,7 @@ export default {
         })
       }).finally(() => {
         uni.hideLoading()
+        this.focus()
       })
     },
     
@@ -375,7 +379,9 @@ export default {
         this.tempLock = false
         if (res && res.code === 0) {
           this.form.bd = 'yes'
-          this.form.id = res.data
+          this.form.id = res.data.id
+          this.form.jptm = res.data.oldBarcode
+          this.form.xptm = res.data.newBarcode
         } else if (res && res.code === 301) {
           uni.showModal({
             showCancel: false,
@@ -493,7 +499,7 @@ export default {
           setTimeout(() => {
             this.query()
             this.$emit('getTip')
-          }, 2000)          
+          }, 2000)        
         }
 
         // 提交后自动登出

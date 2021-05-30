@@ -185,6 +185,9 @@ export default {
       }).then(res => {
         if (res && res.code === 0) {
           this.hdListLength = res.rows.length
+          if (this.curComponent === 'hd' && this.hdListLength === 0) {
+            this.$refs.com.login(true)
+          }
         }
       })
     },

@@ -7,6 +7,7 @@
           :value="scanNumber"
           @confirm="(e) => handleGetScanData(e.target.value)"
           :placeholder="placeholder"
+          :focus="autoFocus"
           @focus="changeFocus"
           :auto-blur="false"
         />
@@ -54,6 +55,7 @@ import { checkGrantIsIPQC, checkProgramExist } from "@/api/api.js";
 export default {
   data() {
     return {
+      autoFocus: true,
       programId: '',
       productLine: '',
       productName: '',
@@ -173,7 +175,14 @@ export default {
       this.productName = ''
       this.loginUser = []
       this.curInput = 1
-    }
+      this.focus()
+    },
+    focus () {
+      this.autoFocus = false
+      this.$nextTick(() => {
+        this.autoFocus = true
+      })
+    },
   },
 };
 </script>

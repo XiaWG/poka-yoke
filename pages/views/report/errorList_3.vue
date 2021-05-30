@@ -16,42 +16,73 @@
     </view>
     <view class="body">
       <scroll-view scroll-x scroll-y>
-        <t-table min-width="370px">
+        <t-table min-width="1500px">
           <t-tr>
-            <t-th :width="100">机种</t-th>
-            <t-th :width="50">线体</t-th>
-            <!-- <t-th :width="80">版本</t-th> -->
-            <t-th :width="60">采集人</t-th>
-            <t-th :width="120">采集时间</t-th>
-            <t-th :width="50">操作</t-th>
+            <t-th :width="80">机种</t-th>
+            <t-th :width="40">站位</t-th>
+            <t-th :width="60">上料人</t-th>
+            <t-th :width="80">上料时间</t-th>
+            <t-th :width="60">提交人</t-th>
+            <t-th :width="80">提交时间</t-th>
+            <t-th :width="60">核料人</t-th>
+            <t-th :width="80">核料时间</t-th>
+            <t-th :width="60">巡检人</t-th>
+            <t-th :width="80">巡检时间</t-th>
+            <t-th :width="150">旧盘</t-th>
+            <t-th :width="150">新盘</t-th>
+            <t-th :width="150">核料盘</t-th>
+            <t-th :width="150">巡料盘</t-th>
+            <t-th :width="150">错误信息</t-th>
           </t-tr>
           <template v-if='mainList.length'>
             <t-tr 
               v-for="(item, index) in mainList" 
               :key="index"
-              @click.native="handleDetail(item)"
             >
-              <t-td :width="100">
+              <t-td :width="80">
                 {{ item.programName }}
               </t-td>
-              <t-td :width="50">
-                {{ item.lineName }}
+              <t-td :width="40">
+                {{ item.stationName }}
               </t-td>
-              <!-- <t-td :width="80">
-                {{ item.version }}
-              </t-td> -->
               <t-td :width="60">
                 {{ item.createBy }}
               </t-td>
-              <t-td :width="120">
+              <t-td :width="80">
                 {{ item.createTime }}
               </t-td>
-              <t-td :width="50">
-                <image
-                  class="table-icon" 
-                  src='../../../static/icon/delete.png'
-                  @click.stop="handleDel(item)"
-                />
+              <t-td :width="60">
+                {{ item.createBy }}
+              </t-td>
+              <t-td :width="80">
+                {{ item.createTime }}
+              </t-td>
+              <t-td :width="60">
+                {{ item.createBy }}
+              </t-td>
+              <t-td :width="80">
+                {{ item.createTime }}
+              </t-td>
+              <t-td :width="60">
+                {{ item.createBy }}
+              </t-td>
+              <t-td :width="80">
+                {{ item.createTime }}
+              </t-td>
+              <t-td :width="150">
+                {{ item.oldBarcode }}
+              </t-td>
+              <t-td :width="150">
+                {{ item.newBarcode }}
+              </t-td>
+              <t-td :width="150">
+                {{ item.oldBarcode }}
+              </t-td>
+              <t-td :width="150">
+                {{ item.newBarcode }}
+              </t-td>
+              <t-td :width="150">
+                {{ item.scanInfo }}
               </t-td>
             </t-tr>
           </template>
@@ -67,7 +98,7 @@
         <input 
           class="queryInput"
           type="text"
-          placeholder="请选择采集时间"
+          placeholder="请选择操作时间"
           v-model.trim="rangeTime"
         />
       </view>
@@ -75,26 +106,33 @@
         <input 
           class="queryInput"
           type="text"
-          placeholder="请扫描或录入机种名"
+          placeholder="请扫描或录入程序名称"
           v-model.trim="query.programName"
         />
       </view>
       <view>
         <input class="queryInput"
           type="text"
-          placeholder="请扫描或录入线体"
+          placeholder="请扫描或录入线体名称"
           v-model.trim="query.lineName"
         />        
       </view>
       <view>
         <input class="queryInput"
           type="text"
-          placeholder="请扫描或录入采集人"
+          placeholder="请扫描或录入站位名称"
+          v-model.trim="query.stationName"
+        />        
+      </view>
+      <view>
+        <input class="queryInput"
+          type="text"
+          placeholder="请扫描或录入操作人"
           v-model.trim="query.createBy"
         />        
       </view>
       <view style="padding: 20rpx;display:flex;flex-direction: row">
-        <span class="searchBtn" style="background: #24bb24" @click="searched=true, search(query)">确认</span>
+        <span class="searchBtn" style="background: #24bb24" @click="search(query)">确认</span>
         <span class="searchBtn" style="background: #007aff" @click="reset">重置</span>
         <span class="searchBtn" style="background: red" @click="$refs.popup.close()">取消</span>
       </view>
@@ -106,45 +144,13 @@
         @confirm="handleChange"
       />
     </uni-popup>
-
-    <uni-popup class="list-dialog" ref="login_popup" type="center" :maskClick="false">
-      <view class="row pop_title">
-        请登陆账号
-      </view>
-      <view class="row">
-        <input 
-          class="login-input"
-          placeholder="账号"
-          v-model.trim="login.user"
-          autocomplete="off"
-        />
-      </view>
-      <view class="row">
-        <input 
-          id="p"
-          class="login-input"
-          type="password"
-          v-model.trim="login.password"
-          placeholder="密码"
-          autocomplete= "off"
-        />
-      </view>
-      <view class="row">
-        <button type="warn" size="default" style="width:100%" @click="handleCancelLogin">
-          取消
-        </button>
-        <button type="primary" size="default" style="width:100%" @click="handleLogin">
-          确认
-        </button>
-      </view>
-    </uni-popup>
   
   </view>
 </template>
 
 <script>
 import uniCalendar from '@/components/uni-calendar/uni-calendar.vue'
-import { pdaProgramList, deleteProgramById } from '@/api/api.js'
+import { pdaScanHistoryList } from '@/api/api.js'
 import tTable from "@/components/t-table/t-table.vue";
 import tTh from "@/components/t-table/t-th.vue";
 import tTr from "@/components/t-table/t-tr.vue";
@@ -161,28 +167,26 @@ export default {
   data() {
     return {
       rangeTime: '',
-      query: {        
+      query: {
+        begin: '',
+        end: '',
         programName: '',
         lineName: '',
+        stationName: '',
         createBy: '',
-        begin: '',
-        end: ''
+        type: '0'
       },
-      searched: false,
       mainList: [
         
-      ],
-      programId: '',
-      login: {
-        user: '',
-        password: ''
-      }
+      ]
     }
   },
 
   mounted () {
-    this.searched = false
-    this.search({ select: 'top' })
+    // this.query.createTime = this.$formatterTime(new Date(), false, 1)
+    setTimeout(() => {
+      this.search({ select: 'top', type: '0' })
+    }, 1000)
   },
 
   methods: {
@@ -192,91 +196,25 @@ export default {
     search (query) {
       this.$refs.popup.close()
       uni.showLoading()
-      pdaProgramList(query).then(res => {
+      pdaScanHistoryList(query).then(res => {
         uni.hideLoading()
         this.mainList = res.rows
       })
     },
     reset () {
-      this.query.begin = ''
-      this.query.end = '' // this.$formatterTime(new Date(), false, 1)
+      // this.query.createTime = this.$formatterTime(new Date(), false, 1)
       this.query.programName = ''
-      this.query.lineName = ''
+      this.query.lineName = '',
+      this.query.stationName = '',
       this.query.createBy = ''
+      this.query.begin = ''
+      this.query.end = ''
       this.rangeTime = ''
     },
     handleChange (e) {
       this.query.begin = e.range.before
       this.query.end = e.range.after
       this.rangeTime = e.range.before + '~' +  e.range.after
-    },
-    handleDetail (r) {
-      uni.showModal({
-        showCancel: true,
-        content: '选择功能',
-        cancelText: '详情',
-        confirmText: '生产',
-        success: (res) => {
-          if (res.confirm) {
-            // 缓存线体信息 下次自动跳转
-            this.$store.commit('updateExtState', {
-              programId: r.id,
-              productName: r.programName,
-              productLine: r.lineName
-            })
-            uni.reLaunch({
-              url: `/pages/views/ext/main?programId=${r.id}&name=${r.programName}&productLine=${r.lineName}`
-            })
-          } else {
-            uni.navigateTo({
-              url: `/pages/views/lzb/detail?id=${r.id}&name=${r.programName}&curLine=${r.lineName}`,
-            })
-          }
-        },
-      })      
-    },
-
-    handleDel (r) {
-      this.programId = r.id
-      this.$refs.login_popup.open()
-    },
-
-    handleLogin () {
-      if (!this.login.user || !this.login.password) {
-        uni.showToast({
-          title: '请输入账号密码',
-          duration: 2000,
-          icon: "none",
-          position: 'top'
-        })
-        return
-      }
-      deleteProgramById({
-        programId: this.programId,
-        userName: this.login.user,
-        password: this.login.password,
-      }).then(res => {
-        if (res.code === 0) {
-          uni.showToast({
-            title: '删除成功',
-            duration: 2000,
-            icon: "none",
-            position: 'top'
-          })
-          if (!this.searched) {
-            this.search({ select: 'top' })
-          } else {
-            this.search(this.query)
-          }
-        }
-        this.handleCancelLogin()
-      })
-    },
-
-    handleCancelLogin () {
-      this.login.user = ''
-      this.login.password = ''
-      this.$refs.login_popup.close()
     }
   },
   onNavigationBarButtonTap(e) {
@@ -409,14 +347,6 @@ export default {
   height: 40px;
   padding: 0 10px;
   border-radius: 10px;
-}
-
-.login-input{
-  border: 1px solid #ccc;
-  width: 100%;
-  height: 60rpx;
-  line-height: 60rpx;
-  padding: 0 20rpx;
 }
 </style>
 

@@ -7,9 +7,9 @@
             <t-th :width="50">料站</t-th>
             <t-th :width="100">料号</t-th>
             <t-th :width="50">类型</t-th>
+            <t-th :width="50">操作</t-th>
             <t-th :width="65">采集人1</t-th>
             <t-th :width="65">采集人2</t-th>
-            <t-th :width="50">操作</t-th>
           </t-tr>
           <template v-if='mainList.length'>
             <t-tr 
@@ -19,17 +19,11 @@
               <t-td :width="50">
                 {{ item.stationName }}
               </t-td>
-              <t-td :width="100">
-                {{ item.originalBarcode }}
+              <t-td :width="100" style="color: blue" @click.native="handleClickCode(item)">
+                {{ item.substrBarcode || item.originalBarcode }}
               </t-td>
               <t-td :width="50">
                 {{ item.type === '0' ? '主料' : '替代料' }}
-              </t-td>
-              <t-td :width="65">
-                {{ item.firCollector }}
-              </t-td>
-              <t-td :width="65">
-                {{ item.secCollector }}
               </t-td>
               <t-td :width="50">
                 <image
@@ -37,6 +31,12 @@
                   src='../../../static/icon/delete.png'
                   @click.stop="handleDel(item)"
                 />
+              </t-td>
+              <t-td :width="65">
+                {{ item.firCollector }}
+              </t-td>
+              <t-td :width="65">
+                {{ item.secCollector }}
               </t-td>
             </t-tr>
           </template>
@@ -76,6 +76,15 @@
         </button>
       </view>
     </uni-popup>
+    <uni-popup ref="slice_popup" type="fullScreen" :maskClick="false">
+      <slicePop
+        :model="curRow"
+        :slice_user="slice_user"
+        @login="handleLogin1"
+        @close="$refs.slice_popup.close()"
+        @refresh="getList"
+      />
+    </uni-popup>
   </view>
 </template>
 
@@ -86,6 +95,7 @@ import tTable from "@/components/t-table/t-table.vue";
 import tTh from "@/components/t-table/t-th.vue";
 import tTr from "@/components/t-table/t-tr.vue";
 import tTd from "@/components/t-table/t-td.vue";
+import slicePop from "./slicePop.vue";
 
 export default {
   components: {
@@ -94,6 +104,7 @@ export default {
     tTh,
     tTr,
     tTd,
+    slicePop
   },
   data() {
     return {
@@ -103,8 +114,9 @@ export default {
       login: {
         user: '',
         password: ''
-      }
-
+      },
+      curRow: {},
+      slice_user: {}
     }
   },
   onReady() {
@@ -168,6 +180,15 @@ export default {
       this.login.user = ''
       this.login.password = ''
       this.$refs.login_popup.close()
+    },
+
+    handleClickCode (r) {
+      this.$refs.slice_popup.open()
+      this.curRow = r
+    },
+
+    handleLogin1 (data) {
+      this.slice_user = data
     }
   },
 

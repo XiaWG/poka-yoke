@@ -93,6 +93,9 @@ export default {
     },
   },
   created() {},
+  onNavigationBarButtonTap(e) {
+    this.$store.commit('showKeyboard/SET_KEYBOARD_TIMER', true)
+	},
 };
 </script>
 

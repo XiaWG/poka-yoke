@@ -21,8 +21,8 @@
           @click="handleScan"
         />
       </view>
-      <view class="title" style="font-weight: normal;width: 100%; overflow: auto;padding-right: 50px">
-        <view style="white-space: nowrap">
+      <view class="title" style="font-weight: normal;width: 100%; padding-right: 50px">
+        <view style="white-space: nowrap; overflow: auto;">
           料站: {{ scanedData.lz || '--' }}
           条码: {{ scanedData.yptm || '--' }}
         </view>        
@@ -35,13 +35,14 @@
       <scroll-view scroll-x scroll-y>
         <t-table min-width="730px">
           <t-tr>
-            <t-th :width="100">料站</t-th>
+            <t-th :width="60">料站</t-th>
             <t-th :width="150">原盘条码</t-th>
+            <t-th :width="80">截码</t-th>
+            <t-th :width="80">操作</t-th>
             <t-th :width="80">规格</t-th>
             <t-th :width="80">封装</t-th>
             <t-th :width="80">精度</t-th>
             <t-th :width="80">耐压</t-th>
-            <t-th :width="80">操作</t-th>
           </t-tr>          
           <template v-if='mainList.length'>
             <t-tr 
@@ -50,14 +51,11 @@
               @click.native="handleRefreshSub(item, index)"
               :class="[(cur && index === cur.index) ? 'active' : '']"
             >
-              <t-td :width="100">
-                {{ item.lz}}<span style="color:red">{{ item.isT ? '[替]' : '' }}</span>
+              <t-td :width="60">
+                {{ item.lz}}<span style="color:red">{{ item.isT ? '替' : '' }}</span>
               </t-td>
               <t-td :width="150">{{ item.yptm }}</t-td>
-              <t-td :width="80">{{ item.gg }}</t-td>
-              <t-td :width="80">{{ item.fz }}</t-td>
-              <t-td :width="80">{{ item.jd }}</t-td>
-              <t-td :width="80">{{ item.ny }}</t-td>
+              <t-td :width="80">{{ item.substrBarcode }}</t-td>
               <t-td :width="80">
                 <template v-if="item.actionAble">
                   <span>
@@ -79,6 +77,10 @@
                   --
                 </template>
               </t-td>
+              <t-td :width="80">{{ item.gg }}</t-td>
+              <t-td :width="80">{{ item.fz }}</t-td>
+              <t-td :width="80">{{ item.jd }}</t-td>
+              <t-td :width="80">{{ item.ny }}</t-td>
             </t-tr>
           </template>            
           <tr v-else style="height:168px">
@@ -150,6 +152,38 @@
       </view>
       <view class="row">
         <view class="label">
+          截码
+        </view>
+        <view class="value">
+          {{ form.substrBarcode }}
+        </view>
+      </view>
+      <!-- <view class="row">
+        <view class="label">
+          起始位置
+        </view>
+        <view class="value">
+          <easyinput
+            type="number"
+            v-model="form.startLocation"
+            placeholder="请输入"
+          />
+        </view>
+      </view>
+      <view class="row">
+        <view class="label">
+          结束位置
+        </view>
+        <view class="value">
+          <easyinput
+            type="number"
+            v-model="form.endLocation"
+            placeholder="请输入"
+          />
+        </view>
+      </view> -->
+      <!-- <view class="row">
+        <view class="label">
           规格
         </view>
         <view class="value">
@@ -191,10 +225,13 @@
             placeholder="请输入"
           />
         </view>
-      </view>
+      </view> -->
       <view class="row">
         <button type="warn" size="default" style="width:100%" @click="$refs.popup.close()">
           取消
+        </button>
+        <button type="default" size="default" style="width:100%" @click="handleSlice">
+          截码
         </button>
         <button type="primary" size="default" style="width:100%" @click="handleSubmit">
           确认
@@ -224,6 +261,34 @@
         </button>
       </view>     
 		</uni-popup>
+
+    <uni-popup ref="slice_pop" type="fullScreen" :maskClick="false">
+      <view class="header" style="height: 80rpx;">
+        <view class="title">
+          条码截取 {{ form.lz ? '-' + form.lz : ''}}
+        </view>
+      </view>     
+      <view class="body" >        
+        <view class="slice-box">
+          <span
+            v-for="(item, index) in sliceTm"
+            :key="index"
+            :class="['slice-item', sliceItems.includes(index) ? 'slice-sel' : '']"
+            @click="handleSliceItem(index)"
+          >
+            {{ item }}
+          </span>
+        </view>        
+      </view>
+      <view class="footer" style="height: 100rpx;">
+        <button type="warn" style="width: 100%" @click="$refs.slice_pop.close()">
+          取消
+        </button>
+        <button type="primary" style="width: 100%" @click="handleSure">
+          确认
+        </button>
+      </view>
+		</uni-popup>
   </view>
 </template>
 
@@ -233,7 +298,7 @@ import tTable from "@/components/t-table/t-table.vue";
 import tTh from "@/components/t-table/t-th.vue";
 import tTr from "@/components/t-table/t-tr.vue";
 import tTd from "@/components/t-table/t-td.vue";
-import { partDataDetailByPartNo, programCollection, pdaProgramDetailList, deleteProgramDetailById } from '@/api/api.js'
+import { partDataDetailByPartNo, programCollection, pdaProgramDetailList, programCollectionBefore } from '@/api/api.js'
 
 export default {
   components: {
@@ -253,10 +318,13 @@ export default {
         line: '',
         lz: '',
         yptm: '',
+        substrBarcode: '',
         gg: '',
         fz: '',
         jd: '',
         ny: '',
+        startLocation: '',
+        endLocation: '',
       },
       cur: {
         item: null,
@@ -273,6 +341,11 @@ export default {
         lz: '',
         yptm: ''
       },
+      sliceTm: [],
+      sliceIndex: [-1, -1],
+      slicePos: 0,
+      sliceItems: [],
+      sliceTms: ''
     };
   },
   onShow() {
@@ -303,6 +376,51 @@ export default {
     },
   },
   methods: {
+    handleSlice () {
+      this.sliceTm = this.form.yptm.split('')
+      this.sliceIndex[0] = this.form.startLocation ? this.form.startLocation : -1
+      this.sliceIndex[1] = this.form.endLocation ? this.form.endLocation : -1
+      this.sliceTms = this.form.substrBarcode ? this.form.substrBarcode : ''
+      this.sliceItems = []
+      for (var i = this.sliceIndex[0]; i <= this.sliceIndex[1]; i++) {
+        this.sliceItems.push(i)
+      }
+      this.slicePos = 0
+      this.$refs.slice_pop.open()
+    },
+    handleSliceItem (index) {
+      if (this.slicePos == 0) {
+        this.sliceIndex[0] = index
+        this.sliceIndex[1] = index
+      }
+      if (this.slicePos == 1) {
+        this.sliceIndex[1] = index
+      }
+      this.slicePos ++
+      if (this.slicePos > 1) {
+        this.slicePos = 0
+      }
+      this.sliceItems = []
+      for (var i = this.sliceIndex[0]; i <= this.sliceIndex[1]; i++) {
+        this.sliceItems.push(i)
+      }
+      this.sliceTms = this.sliceTm.slice(this.sliceIndex[0], this.sliceIndex[1] + 1).join('')
+    },
+    handleSure () {
+      if (this.sliceIndex.includes(-1) || !this.sliceTms) {
+        this.form.startLocation = ''
+        this.form.endLocation = ''
+        this.form.isSubstr = '0'
+        this.form.substrBarcode = ''      
+        this.$refs.slice_pop.close()
+      } else {
+        this.form.startLocation = this.sliceIndex[0]
+        this.form.endLocation = this.sliceIndex[1]
+        this.form.isSubstr = '1'
+        this.form.substrBarcode = this.sliceTms
+        this.$refs.slice_pop.close()
+      }
+    },
     getList () {
       uni.showLoading()
       pdaProgramDetailList({
@@ -357,18 +475,50 @@ export default {
           this.$warning()
           return false
         }
+        // 校验料站重复
+        if (this.mainList.findIndex(d => d.lz === value && !d.isT) > -1) {
+          uni.showToast({
+            title: '料站已录入',
+            duration: 2000,
+            icon: "none",
+          })
+          this.$warning()
+          return false
+        }
         this.curLine = value.slice(0, 1)
-        this.form.line = this.curLine
-        this.form[this.curField] = value.slice(1)
-        this.scanedData.lz = this.form[this.curField]
-        this.scanedData.yptm = ''
-        this.curInput ++
+        uni.showLoading()
+        const res = await programCollectionBefore({
+          programName: this.option.name,
+          lineName: this.curLine,
+          stationName: value
+        }).catch((res) => {
+          uni.showModal({
+            showCancel: false,
+            title: "提示",
+            content: res.data.msg,
+            success: (res) => {
+              if (res.confirm) {
+                this.focus()
+              }
+            },
+          })          
+        }).finally(() => {          
+          uni.hideLoading()
+        })
+        if (res && res.code === 0) {
+          this.form.line = this.curLine
+          this.form[this.curField] = value // .slice(1)
+          this.scanedData.lz = this.form[this.curField]
+          this.scanedData.yptm = ''
+          this.curInput ++
+        }        
       } else if (this.curInput === 2 || this.curInput === 3) { // 圆盘
         uni.showLoading()
         const res = await partDataDetailByPartNo({
           partCode: value
-        })
-        uni.hideLoading()
+        }).finally(() => {
+          uni.hideLoading()
+        })        
         let _obj = {}
         if (res && res.code === 0 && res.data) {
           this.form[this.curField] = value
@@ -379,6 +529,10 @@ export default {
             fz: res.data.potting,
             jd: res.data.accuracy,
             ny: res.data.compression,
+            startLocation: '',
+            endLocation: '',
+            isSubstr: '0',
+            substrBarcode: '',
             actionAble: true
           }
         } else {
@@ -439,6 +593,7 @@ export default {
         this.form.lz = this.cur.item.lz
       }
     },
+
     handleReplace2 () {
       this.scanedData.yptm = ''
       this.autoFocus = false
@@ -467,6 +622,43 @@ export default {
         })
         return
       }
+      // const L = this.form.yptm.length
+      // if ((this.form.startLocation == '' && this.form.endLocation != '') || (this.form.startLocation != '' && this.form.endLocation == '')) {
+      //   uni.showToast({
+      //     title: '起始位置,结束位置需同时定义',
+      //     duration: 2000,
+      //     icon: "none",
+      //   })
+      //   return
+      // }
+      // if ((this.form.startLocation != '' && this.form.startLocation < 0) || (this.form.startLocation != '' && parseInt(this.form.startLocation) != this.form.startLocation)) {
+      //   uni.showToast({
+      //     title: '起始位置应为大于0的整数',
+      //     duration: 2000,
+      //     icon: "none",
+      //   })
+      //   return
+      // }
+      // if ((this.form.endLocation != '' && this.form.endLocation > L) || (this.form.endLocation != '' && parseInt(this.form.endLocation) != this.form.endLocation)) {
+      //   uni.showToast({
+      //     title: '结束位置应为小于条码最大长度的整数',
+      //     duration: 2000,
+      //     icon: "none",
+      //   })
+      //   return
+      // }
+      // if (this.form.startLocation != '' && this.form.endLocation != '') {
+      //   if ((this.form.endLocation - this.form.startLocation) <= 0) {
+      //     uni.showToast({
+      //       title: '结束位置应大于起始位置',
+      //       duration: 2000,
+      //       icon: "none",
+      //     })
+      //     return
+      //   }
+      //   this.form.isSubstr = '1'
+      //   this.form.substrBarcode = this.form.yptm.slice(this.form.startLocation, this.form.endLocation)
+      // }
       this.mainList.splice(this.curIndex, 1, {...this.form})
       this.curIndex = null
       this.$refs.popup.close()
@@ -503,9 +695,13 @@ export default {
         lineName: this.curLine,
         detail: data.map(d => {
           const __obj = {}
-          __obj.stationName = d.lz,
-          __obj.partCode = d.yptm,
+          __obj.stationName = d.lz
+          __obj.partCode = d.yptm
           __obj.type = d.isT ? 1 : 0
+          __obj.isSubstr = d.isSubstr
+          __obj.startLocation = d.startLocation
+          __obj.endLocation = d.endLocation
+          __obj.substrBarcode = d.substrBarcode
           return __obj
         })
       }
@@ -531,12 +727,20 @@ export default {
         this.scanNumber = ''
       })
       this.curInput = 1
+      this.scanedData.lz = ''
+      this.scanedData.yptm = ''      
+      this.focus()
     },
 
     handleReset () {
       this.scanedData.lz = ''
       this.scanedData.yptm = ''
       this.reset()
+      // this.$refs.slice_pop.open()
+      // this.sliceTm = []
+      // for(var i = 0; i<200; i++) {
+      //   this.sliceTm.push(i)
+      // }
     },
 
     focus () {
@@ -554,12 +758,35 @@ export default {
 
   },
   onNavigationBarButtonTap(e) {
-    this.$store.commit('showKeyboard/SET_KEYBOARD_TIMER', true)
+    if (e.index === 0) {
+      const data = this.mainList.filter(d => !d.id)
+      if (data.length !== 0) {
+        uni.showModal({
+          showCancel: true,
+          title: "提示",
+          content: '数据未提交,确认返回主页?',
+          success: (res) => {
+            if (res.confirm) {
+              uni.reLaunch({ // 返回主页
+                url: '/pages/menu/menu'
+              })
+            }
+          },
+        })
+      } else {
+        uni.reLaunch({ // 返回主页
+          url: '/pages/menu/menu'
+        })
+      }
+    }
+    if (e.index === 1) {
+      this.$store.commit('showKeyboard/SET_KEYBOARD_TIMER', true)
+    }    
 	},
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .scanBox{
   flex-direction: row;
   border-bottom: 1px solid #ccc;
@@ -625,7 +852,7 @@ export default {
 }
 .value input{
   flex: 1;
-  border-bottom: 1px solid #ccc;
+  // border-bottom: 1px solid #ccc;
   height: 50rpx;
   padding: 10rpx;
   font-size: 30rpx;
@@ -680,5 +907,26 @@ export default {
   height: 40rpx;
   margin: 0 10rpx;
 }
-</style>
 
+.slice-box {
+  display: block;
+  overflow: auto;
+
+  .slice-item{
+    float: left;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 2px;
+  }
+
+  .slice-sel{
+    background: blue;
+    color: #fff;
+  }
+}
+
+</style>

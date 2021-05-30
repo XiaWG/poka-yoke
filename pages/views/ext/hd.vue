@@ -193,12 +193,24 @@ export default {
       }
       if (!this.loginInfo.userName) {
         this.tempLock = true
+        setTimeout(() => {
+          this.login()
+        }, 100)
       } else {
         this.tempLock = false
       }
     },
-    login () {
+    login (flag) {
       if (this.loginInfo.userName) {
+        if (flag) { // 自动退出
+          this.loginInfo = {}
+          this.$store.commit('updateExtState', {
+            hdUser: this.loginInfo
+          })
+          this.$emit('login', '')
+          this.init()
+          return
+        }
         uni.showModal({
           showCancel: true,
           title: "提示",
@@ -270,6 +282,7 @@ export default {
         this.dataNum = this.subList.length
       }).finally(() => {
         uni.hideLoading()
+        this.focus()
       })
     },
 
@@ -349,6 +362,8 @@ export default {
         this.tempLock = false
         if (res && res.code === 0) {
           this.form.bd = 'yes'
+          this.subList[this.IPQCInd].xptm = res.data.oldBarcode
+          this.subList[this.IPQCInd].ipqc = res.data.newBarcode
         } else if (res && res.code === 301) {
           uni.showModal({
             showCancel: false,
@@ -367,8 +382,7 @@ export default {
         }
         if (this.form.bd === 'yes') {
           this.$Voice('../../../static/music/OK.mp3')
-          this.errNum = 0
-          this.subList[this.IPQCInd].ipqc = value
+          this.errNum = 0          
           this.subList[this.IPQCInd].bd = this.form.bd
           // this.subList.splice(this.IPQCInd, 1)
           this.reset()

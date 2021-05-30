@@ -156,3 +156,23 @@ export const selectPdaScanConfirmInfo = (data) =>
     method: "post",
     body: data,
   })
+
+export const programCollectionBefore = (data) =>
+  request("/pda/pdaOperation/programCollectionBefore", {
+    method: "post",
+    body: data,
+  })
+
+  // 料站表 详情 截码 登录验证
+export const updateProgramDetailBeforeCheckUser = (data) =>
+  request("/pda/pdaLogin/updateProgramDetailBeforeCheckUser", {
+    method: "post",
+    body: data,
+  })
+export const updateProgramDetailById = (data) =>
+  request("/pda/pdaOperation/updateProgramDetailById", {
+    method: "post",
+    body: data,
+  })
+  
+  

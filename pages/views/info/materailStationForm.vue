@@ -5,7 +5,7 @@
         <input
           class="scanInput"
           :value="scanNumber"
-          :focus="locationFocus"
+          :focus="autoFocus"
           :disabled="disable"
           @confirm="(e) => handleGetScanData(e.target.value, 'productName')"
           :placeholder="placeholder"
@@ -65,7 +65,7 @@ export default {
   data() {
     return {
       productName: '',
-      locationFocus: false,
+      autoFocus: true,
       loginUser: [],
       scanNumber: '',
       curInput: 1,
@@ -167,7 +167,7 @@ export default {
       // #endif
     },
     goToPage(url) {
-      uni.navigateTo({
+      uni.reLaunch({
         url,
       })
     },
@@ -179,8 +179,16 @@ export default {
       } else {
         this.productName = ''
         this.curInput = 1
-      }      
-    }
+      }
+      this.focus()
+    },
+
+    focus () {
+      this.autoFocus = false
+      this.$nextTick(() => {
+        this.autoFocus = true
+      })
+    },
   },
 };
 </script>
