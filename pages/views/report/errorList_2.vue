@@ -16,7 +16,7 @@
     </view>
     <view class="body">
       <scroll-view scroll-x scroll-y>
-        <t-table min-width="1100px">
+        <t-table min-width="1240px">
           <t-tr>
             <t-th :width="80">机种</t-th>
             <t-th :width="40">站位</t-th>
@@ -24,6 +24,8 @@
             <t-th :width="80">上料时间</t-th>
             <t-th :width="60">提交人</t-th>
             <t-th :width="80">提交时间</t-th>
+            <t-th :width="60">核料人</t-th>
+            <t-th :width="80">核料时间</t-th>
             <t-th :width="150">旧盘</t-th>
             <t-th :width="150">新盘</t-th>
             <t-th :width="150">核料盘</t-th>
@@ -41,10 +43,16 @@
                 {{ item.stationName }}
               </t-td>
               <t-td :width="60">
-                {{ item.createBy }}
+                {{ item.loadingPeople }}
               </t-td>
               <t-td :width="80">
-                {{ item.createTime }}
+                {{ item.loadingTime }}
+              </t-td>
+              <t-td :width="60">
+                {{ item.updateBy }}
+              </t-td>
+              <t-td :width="80">
+                {{ item.updateTime }}
               </t-td>
               <t-td :width="60">
                 {{ item.createBy }}
@@ -59,7 +67,7 @@
                 {{ item.newBarcode }}
               </t-td>
               <t-td :width="150">
-                {{ item.newBarcode }}
+                {{ item.checkBarcode }}
               </t-td>
               <t-td :width="150">
                 {{ item.scanInfo }}
@@ -130,7 +138,7 @@
 
 <script>
 import uniCalendar from '@/components/uni-calendar/uni-calendar.vue'
-import { pdaScanHistoryList } from '@/api/api.js'
+import { pdaScanHistoryListByIPQCScan } from '@/api/api.js'
 import tTable from "@/components/t-table/t-table.vue";
 import tTh from "@/components/t-table/t-th.vue";
 import tTr from "@/components/t-table/t-tr.vue";
@@ -166,7 +174,7 @@ export default {
     // this.query.createTime = this.$formatterTime(new Date(), false, 1)
     setTimeout(() => {
       this.search({ select: 'top', type: '0' })
-    }, 1000)
+    }, 100)
   },
 
   methods: {
@@ -176,7 +184,7 @@ export default {
     search (query) {
       this.$refs.popup.close()
       uni.showLoading()
-      pdaScanHistoryList(query).then(res => {
+      pdaScanHistoryListByIPQCScan(query).then(res => {
         uni.hideLoading()
         this.mainList = res.rows
       })

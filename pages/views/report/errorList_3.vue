@@ -46,22 +46,22 @@
                 {{ item.stationName }}
               </t-td>
               <t-td :width="60">
-                {{ item.createBy }}
+                {{ item.loadingPeople }}
               </t-td>
               <t-td :width="80">
-                {{ item.createTime }}
+                {{ item.loadingTime }}
               </t-td>
               <t-td :width="60">
-                {{ item.createBy }}
+                {{ item.updateBy }}
               </t-td>
               <t-td :width="80">
-                {{ item.createTime }}
+                {{ item.updateTime }}
               </t-td>
               <t-td :width="60">
-                {{ item.createBy }}
+                {{ item.confirmBy }}
               </t-td>
               <t-td :width="80">
-                {{ item.createTime }}
+                {{ item.confirmTime }}
               </t-td>
               <t-td :width="60">
                 {{ item.createBy }}
@@ -76,10 +76,10 @@
                 {{ item.newBarcode }}
               </t-td>
               <t-td :width="150">
-                {{ item.oldBarcode }}
+                {{ item.newBarcode }}
               </t-td>
               <t-td :width="150">
-                {{ item.newBarcode }}
+                {{ item.checkBarcode }}
               </t-td>
               <t-td :width="150">
                 {{ item.scanInfo }}
@@ -150,7 +150,7 @@
 
 <script>
 import uniCalendar from '@/components/uni-calendar/uni-calendar.vue'
-import { pdaScanHistoryList } from '@/api/api.js'
+import { pdaScanHistoryListByIPQCPatrol } from '@/api/api.js'
 import tTable from "@/components/t-table/t-table.vue";
 import tTh from "@/components/t-table/t-th.vue";
 import tTr from "@/components/t-table/t-tr.vue";
@@ -186,7 +186,7 @@ export default {
     // this.query.createTime = this.$formatterTime(new Date(), false, 1)
     setTimeout(() => {
       this.search({ select: 'top', type: '0' })
-    }, 1000)
+    }, 100)
   },
 
   methods: {
@@ -196,7 +196,7 @@ export default {
     search (query) {
       this.$refs.popup.close()
       uni.showLoading()
-      pdaScanHistoryList(query).then(res => {
+      pdaScanHistoryListByIPQCPatrol(query).then(res => {
         uni.hideLoading()
         this.mainList = res.rows
       })

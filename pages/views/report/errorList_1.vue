@@ -118,7 +118,7 @@
 
 <script>
 import uniCalendar from '@/components/uni-calendar/uni-calendar.vue'
-import { pdaScanHistoryList } from '@/api/api.js'
+import { pdaScanHistoryListByScan } from '@/api/api.js'
 import tTable from "@/components/t-table/t-table.vue";
 import tTh from "@/components/t-table/t-th.vue";
 import tTr from "@/components/t-table/t-tr.vue";
@@ -154,7 +154,7 @@ export default {
     // this.query.createTime = this.$formatterTime(new Date(), false, 1)
     setTimeout(() => {
       this.search({ select: 'top', type: '0' })
-    }, 1000)
+    }, 100)
   },
 
   methods: {
@@ -164,7 +164,7 @@ export default {
     search (query) {
       this.$refs.popup.close()
       uni.showLoading()
-      pdaScanHistoryList(query).then(res => {
+      pdaScanHistoryListByScan(query).then(res => {
         uni.hideLoading()
         this.mainList = res.rows
       })

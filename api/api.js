@@ -174,5 +174,24 @@ export const updateProgramDetailById = (data) =>
     method: "post",
     body: data,
   })
+
+  // 错误i记录-上料
+export const pdaScanHistoryListByScan = (data) =>
+  request("/pda/pdaOperation/pdaScanHistoryListByScan", {
+    method: "post",
+    body: data,
+  })
+// 错误i记录-核料
+export const pdaScanHistoryListByIPQCScan = (data) =>
+  request("/pda/pdaOperation/pdaScanHistoryListByIPQCScan", {
+    method: "post",
+    body: data,
+  })
+// 错误i记录-巡检
+export const pdaScanHistoryListByIPQCPatrol = (data) =>
+  request("/pda/pdaOperation/pdaScanHistoryListByIPQCPatrol", {
+    method: "post",
+    body: data,
+  })
   
   
