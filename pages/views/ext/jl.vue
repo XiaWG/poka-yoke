@@ -374,9 +374,10 @@ export default {
           createBy: this.loginInfo.loginName
         }).catch(res => {
           errorMsg = res.data.msg || ''
+        }).finally(() => {
+          uni.hideLoading()
+          this.tempLock = false
         })
-        uni.hideLoading()
-        this.tempLock = false
         if (res && res.code === 0) {
           this.form.bd = 'yes'
           this.form.id = res.data.id
