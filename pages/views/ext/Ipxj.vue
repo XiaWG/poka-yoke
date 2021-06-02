@@ -243,14 +243,15 @@ export default {
       this.scanedData.lp = ''
       this.scanedData[this.curField] = value
       if (this.curInput === 1) {
-        const res = await materialScanCheckStation({
+        uni.showLoading()
+        await materialScanCheckStation({
           programId: this.option.programId,
           stationName: this.form.lz,
-        })
-        if (!res) {
+        }).catch(res => {
           this.reset()
-          return false
-        }
+        }).finally(() => {
+          uni.hideLoading()
+        })
       }
       if (this.curInput >= 2) { // 输入完毕
         this.tempLock = true
@@ -263,6 +264,17 @@ export default {
           stationName: this.form.lz,
           newBarcode: value,
           createBy: this.loginInfo.loginName
+        }).catch(res => {
+          uni.showModal({
+            showCancel: false,
+            title: "提示",
+            content: res.data.msg,
+            success: (res) => {
+              if (res.confirm) {
+                // 暂无业务逻辑
+              }
+            },
+          })
         }).finally(() => {
           uni.hideLoading()
           this.tempLock = false

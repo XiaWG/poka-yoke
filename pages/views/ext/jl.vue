@@ -453,7 +453,6 @@ export default {
 
     submit () {
       this.errNum = 0
-      if (this.IPQC) return
       if (!this.mainList.length) {
         uni.showToast({
           title: '没有可提交的数据',
@@ -483,34 +482,35 @@ export default {
           return _obj
         })
       }).then(res => {
-        if (res && res.code === 0) {
-          uni.showToast({
-            title: res.msg,
-            duration: 2000,
-            icon: "none",
-          })
-          this.mainList = []
-          this.$emit('getTip')
-        } else if (res && res.code === 301) {
-          uni.showToast({
-            title: res.msg,
-            duration: 2000,
-            icon: "none",
-          })
-          setTimeout(() => {
-            this.query()
-            this.$emit('getTip')
-          }, 2000)        
-        }
-
-        // 提交后自动登出
-        this.loginInfo = {}
-        this.$store.commit('updateExtState', {
-          jlUser: this.loginInfo
+        uni.showModal({
+          showCancel: false,
+          title: "提示",
+          content: res.msg,
+          success: (res) => {
+            if (res.confirm) {
+              this.query()
+              this.$emit('getTip')
+              // 提交后自动登出
+              this.loginInfo = {}
+              this.$store.commit('updateExtState', {
+                jlUser: this.loginInfo
+              })
+              this.$emit('login', '')
+              this.curInput = 9
+            }
+          },
         })
-        this.$emit('login', '')
-        this.tempLock = true
-
+      }).catch(res => {
+        uni.showModal({
+          showCancel: false,
+          title: "提示",
+          content: res.data.msg,
+          success: (res) => {
+            if (res.confirm) {
+              // 暂无业务逻辑
+            }
+          },
+        })
       }).finally(() => {
         uni.hideLoading()
       })
@@ -524,19 +524,11 @@ export default {
       this.form.lz = ''
       this.form.jptm = ''
       this.form.xptm = ''
-      if (this.IPQC && this.mainList.length === 0) {
-        uni.showToast({
-          title: `确认结束,成功${this.dataNum}盘`,
-          duration: 5000,
-          icon: "none",
-        })
-        this.IPQC = false
-      }
-      this.curInput = this.IPQC ? 2 : 1
-      this.focus()
+      this.curInput = 1
       this.scanedData.lz = ''
       this.scanedData.jptm = ''
       this.scanedData.xptm = ''
+      this.focus()
     },
 
     focus () {
@@ -544,21 +536,6 @@ export default {
       this.$nextTick(() => {
         this.autoFocus = true
       })
-    },
-
-    loginOut () {
-      uni.showModal({
-        showCancel: true,
-        title: "提示",
-        content: '确认退出嘛?退出后数据将清空!',
-        success: (res) => {
-          if (res.confirm) {
-            uni.reLaunch({
-              url: "/pages/menu/menu",
-            })
-          }
-        },
-      })      
     },
 
     goToPage(url) {

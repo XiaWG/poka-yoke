@@ -58,14 +58,14 @@ export default (url, options = {}) => {
 					resolve(res.data)
 				} else {
 					if (res.data) {
-						$warning()
 						const errorMsg = res.data.msg
 						uni.showToast({
 							title: errorMsg,
 							duration: 5000,
 							icon: 'none',
 							position: 'top'
-						})				
+						})
+						$warning()		
 						reject(res)
 					} else {
 						uni.showToast({

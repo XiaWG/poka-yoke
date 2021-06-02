@@ -112,28 +112,37 @@ export default {
         return
       } else if (this.curInput === 2) {
         this.productName = data
-        this.curInput ++
 
         // 校验线体 产品
         uni.showLoading()
         const res = await checkProgramExist({
           programName: this.productName,
           lineName: this.productLine
+        }).catch(res => {
+          uni.showModal({
+            showCancel: true,
+            title: "提示",
+            content: res.data.msg,
+            success: (res) => {
+              if (res.confirm) {
+                this.reset()
+              }
+            },
+          })
+        }).finally(() => {
+          uni.hideLoading()
         })
-        uni.hideLoading()
-        if (!(res && res.code === 0)) {
+        if (res && res.code === 0) {
+          this.programId = res.data.id
+          // 缓存线体信息 下次自动跳转
+          this.$store.commit('updateExtState', {
+            programId: this.programId,
+            productName: this.productName,
+            productLine: this.productLine
+          })
+          this.goToPage(`/pages/views/ext/main?programId=${this.programId}&name=${this.productName}&productLine=${this.productLine}`)
           this.reset()
-          return false
         }
-        this.programId = res.data.id
-        // 缓存线体信息 下次自动跳转
-        this.$store.commit('updateExtState', {
-          programId: this.programId,
-          productName: this.productName,
-          productLine: this.productLine
-        })
-        this.goToPage(`/pages/views/ext/main?programId=${this.programId}&name=${this.productName}&productLine=${this.productLine}`)
-        this.reset()
       } else {
         // 校验登陆人        
       }

@@ -365,19 +365,6 @@ export default {
           this.form.bd = 'yes'
           this.subList[this.IPQCInd].xptm = res.data.oldBarcode
           this.subList[this.IPQCInd].ipqc = res.data.newBarcode
-        } else if (res && res.code === 301) {
-          uni.showModal({
-            showCancel: false,
-            title: "提示",
-            content: res.msg,
-            success: (res) => {
-              if (res.confirm) {
-                this.showLoginEng()
-                this.reset()
-              }
-            },
-          })
-          return
         } else {
           this.form.bd = 'error'
         }
@@ -398,11 +385,6 @@ export default {
             content,
             success: (res) => {
               if (res.confirm) {
-                if (this.errNum >= 3) {
-                  this.errNum = 0
-                  this.showLoginEng()
-                  // this.mainList.push({...this.form})
-                }
                 this.reset()
               }
             },
@@ -464,21 +446,6 @@ export default {
       this.$nextTick(() => {
         this.autoFocus = true
       })
-    },
-
-    loginOut () {
-      uni.showModal({
-        showCancel: true,
-        title: "提示",
-        content: '确认退出嘛?退出后数据将清空!',
-        success: (res) => {
-          if (res.confirm) {
-            uni.reLaunch({
-              url: "/pages/menu/menu",
-            })
-          }
-        },
-      })      
     },
 
     goToPage(url) {
