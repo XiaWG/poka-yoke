@@ -86,6 +86,12 @@ if (uni.getStorageSync("beepNum")) {
   store.commit('SETBEEP', 3)
 }
 
+if (uni.getStorageSync("beepInterval")) {
+  store.commit('SETBEEPINTERVAL', uni.getStorageSync("beepInterval"))
+} else {
+  store.commit('SETBEEPINTERVAL', 60000)
+}
+
 if (uni.getStorageSync("defaultServ")) {
   store.commit('SETDEFAULTSERV', uni.getStorageSync("defaultServ"))
 } else {

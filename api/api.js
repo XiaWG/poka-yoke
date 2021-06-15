@@ -193,5 +193,17 @@ export const pdaScanHistoryListByIPQCPatrol = (data) =>
     method: "post",
     body: data,
   })
+
   
+export const addSolder = (data) =>
+  request("/pda/pdaOperation/addSolder", {
+    method: "post",
+    body: data,
+  })
+
+export const addSolderList = (data) =>
+  request("/pda/pdaOperation/addSolderList", {
+    method: "post",
+    body: data,
+  })
   

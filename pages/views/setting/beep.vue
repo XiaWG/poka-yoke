@@ -8,20 +8,43 @@
       <span class="beep-btn" @click="add">+</span>
     </view>
   </view>
+  <view class="list-item" style="justify-content: space-between;">
+    接料提醒时长(min)
+    <span
+      style="display: inline-block; width: 100px"
+    >
+      <easyinput
+        type="number"
+        v-model="beepInterval"
+        placeholder="请输入"
+        :clearable="false"
+        @input="handleSetBeepInterval"
+      />
+    </span>
+    
+  </view>
 </view>
   
 </template>
 
 <script>
+import easyinput from "@/components/uni-easyinput/uni-easyinput.vue";
 export default {
   data () {
     return {
-      beepNum: 0
+      beepNum: 0,
+      beepInterval: 60000
     }
   },
-
+  components: {
+    easyinput
+  },
   mounted () {
     this.beepNum = this.$store.state.beepNum
+    this.beepInterval = this.$store.state.beepInterval / 60000
+  },
+  watch: {
+    
   },
 
   methods: {
@@ -35,8 +58,22 @@ export default {
     add () {
       this.beepNum ++
       this.$store.commit("SETBEEP", this.beepNum)
+    },
+    handleSetBeepInterval (v) {
+      if (v <= 0) {
+        uni.showToast({
+          title: '请输入大于0的正数',
+          duration: 2000,
+          icon: "none",
+        })
+        return false
+      }
+      this.$store.commit("SETBEEPINTERVAL", v * 60 * 1000)
     }
-  }
+  },
+  onNavigationBarButtonTap(e) {
+    this.$store.commit('showKeyboard/SET_KEYBOARD_TIMER', true)
+	},
 }
 </script>
 
@@ -50,6 +87,7 @@ export default {
   background: #fff;
   padding: 20rpx 10rpx;
   height: 50px;
+  border-bottom: 1px solid #ccc
 }
 
 .beep-btn{

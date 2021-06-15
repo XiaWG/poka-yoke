@@ -39,8 +39,12 @@ export default new Vuex.Store({
 			productLine: '',
 			jlUser: {},
 			hdUser: {},
-			xjUser: {}
-		}
+			xjUser: {},
+			jxUser: {}
+		},
+
+		// 接料过期提醒时间
+		beepInterval: 60000
 	},
 	modules: {
 		showKeyboard,
@@ -89,6 +93,10 @@ export default new Vuex.Store({
 		SETBEEP(state, payload) {
 			state.beepNum = payload
 			uni.setStorageSync('beepNum',  payload)
+		},
+		SETBEEPINTERVAL(state, payload) {
+			state.beepInterval = payload
+			uni.setStorageSync('beepInterval',  payload)
 		},
 	},
 	actions: {

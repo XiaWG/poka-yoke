@@ -463,7 +463,9 @@ export default {
             duration: 2000,
             icon: "none",
           })
-          this.$warning()
+          setTimeout(() => {
+            this.$warning()
+          }, 100)
           return false
         }
         if (this.curLine && value.slice(0, 1) != this.curLine) {
@@ -472,7 +474,9 @@ export default {
             duration: 2000,
             icon: "none",
           })
-          this.$warning()
+          setTimeout(() => {
+            this.$warning()
+          }, 100)
           return false
         }
         // 校验料站重复
@@ -482,7 +486,9 @@ export default {
             duration: 2000,
             icon: "none",
           })
-          this.$warning()
+          setTimeout(() => {
+            this.$warning()
+          }, 100)
           return false
         }
         this.curLine = value.slice(0, 1)
@@ -601,10 +607,19 @@ export default {
     },
 
     handleDel (index) {
-      this.mainList.splice(index, 1)
-      if (this.mainList.length === 0) {
-        this.curLine = ''
-      }
+      uni.showModal({
+        showCancel: true,
+        title: "提示",
+        content: '确认删除此条数据吗?',
+        success: (res) => {
+          if (res.confirm) {
+            this.mainList.splice(index, 1)
+            if (this.mainList.length === 0) {
+              this.curLine = ''
+            }
+          }
+        },
+      })
     },
 
     handleEdit (item, index) {

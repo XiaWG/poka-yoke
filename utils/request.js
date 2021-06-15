@@ -65,7 +65,9 @@ export default (url, options = {}) => {
 							icon: 'none',
 							position: 'top'
 						})
-						$warning()		
+						setTimeout(() => {
+							$warning()
+						}, 100)
 						reject(res)
 					} else {
 						uni.showToast({

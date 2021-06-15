@@ -125,10 +125,18 @@ export default {
         jptm: '',
         xptm: ''
       },
+      timer: null
     };
   },
   mounted () {
     this.init()
+  },
+  beforeDestroy () {
+    this.clearTimeout()
+    console.log('beforeDestroy')
+  },
+  destroyed () {
+    console.log('destroyed')
   },
   computed: {
     placeholder () {
@@ -178,7 +186,44 @@ export default {
       return ret
     },
   },
+  watch: {
+    
+  },
   methods: {
+    clearTimeout () {
+      clearTimeout(this.timer)
+    },
+    warning () {
+      uni.showModal({
+        showCancel: false,
+        title: "提示",
+        content: '接料时间超过规定时间,请尽快提交!',
+        success: (res) => {
+          if (res.confirm) {
+            this.timer = setTimeout(() => {
+              this.checkWaring()
+            }, 60000)
+          }
+        },
+      })
+      setTimeout(() => {
+        this.$warning()
+      }, 100)
+    },
+    checkWaring () {
+      if (this.mainList.length > 0) {
+        const minTime = new Date(this.mainList[0].createTime).getTime()
+        const agoTime = new Date().getTime() - minTime
+        const remineTime = this.$store.state.beepInterval - agoTime
+        if (remineTime > 0) {
+          this.timer = setTimeout(() => {
+            this.warning()
+          }, remineTime)
+        } else {
+          this.warning()
+        }
+      }
+    },
     init () {
       // 查询未提交数据
       this.query()
@@ -271,7 +316,8 @@ export default {
           d.xptm = d.newBarcode
           d.bd = 'yes'
           return d
-        })
+        }) 
+        this.checkWaring()       
       }).finally(() => {
         uni.hideLoading()
         this.focus()
@@ -383,6 +429,7 @@ export default {
           this.form.id = res.data.id
           this.form.jptm = res.data.oldBarcode
           this.form.xptm = res.data.newBarcode
+          this.form.createTime = res.data.createTime
         } else if (res && res.code === 301) {
           uni.showModal({
             showCancel: false,
@@ -405,6 +452,8 @@ export default {
           this.mainList.push({...this.form})          
           this.reset()
           this.$emit('getTip')
+          // 录入第一条之后记录时间 规定时间内提交
+          if (this.mainList.length === 1) { this.checkWaring() }
         } else {
           this.errNum ++
           const content = this.errNum >= 3 ? `${errorMsg}(录入错误超过限制次数,请工程师解锁确认)` : errorMsg
@@ -453,6 +502,7 @@ export default {
 
     submit () {
       this.errNum = 0
+      clearTimeout(this.timer)
       if (!this.mainList.length) {
         uni.showToast({
           title: '没有可提交的数据',

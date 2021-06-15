@@ -226,7 +226,19 @@
 			"style": {
 				"navigationBarTitleText": "参数配置-蜂鸣设置",
 				"onReachBottomDistance": 200,
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"app-plus": { 
+					"titleNView": {
+						"buttons": [{
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "right",
+							"fontSize": "24px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue75e"
+						}]
+					}  
+				}
 			}
 		},
 		{

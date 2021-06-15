@@ -21,7 +21,7 @@
 			</view>
 			<view class="center-list-item" @click="handleBeep">
 				<image class="list-item-icon" src="../../static/beep.png"></image>
-				<text class="list-text">蜂鸣设置</text>
+				<text class="list-text">通用设置</text>
 				<text class="navigat-arrow">&#xe65e;</text>
 			</view>
 		</view>

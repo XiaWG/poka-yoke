@@ -82,6 +82,7 @@ import jl from './jl'
 import hd from './hd'
 import upLoadList from './jilu'
 import Ipxj from './Ipxj'
+import jx from './jx'
 import {
   selectPdaScanConfirmInfo
 } from '@/api/api.js'
@@ -90,7 +91,8 @@ export default {
     jl,
     hd,
     upLoadList,
-    Ipxj
+    Ipxj,
+    jx
   },
   data () {
     return {
@@ -137,6 +139,10 @@ export default {
         {
           title: '巡检',
           page: 'Ipxj'
+        },
+        {
+          title: '加锡',
+          page: 'jx',
         }
       ]
     },
@@ -150,6 +156,11 @@ export default {
   onShow () {
     this.getJLData()
     this.getHDData()
+  },
+  onHide () {
+    if (this.curComponent === 'jl') {
+      this.$refs.com.clearTimeout()
+    }    
   },
   mounted () {
     this.active = 0
