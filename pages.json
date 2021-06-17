@@ -1,5 +1,11 @@
 {
-	"pages": [
+	"pages": [		
+		{
+			"path": "pages/menu/menu",
+			"style": {
+				"navigationBarTitleText": "主页"
+			}
+		},
 		{
 			"path": "pages/menu/firstPage",
 			"style": {
@@ -8,12 +14,6 @@
 				"app-plus":{
 					"titleView":false
 				}
-			}
-		},
-		{
-			"path": "pages/menu/menu",
-			"style": {
-				"navigationBarTitleText": "主页"
 			}
 		},
 		{

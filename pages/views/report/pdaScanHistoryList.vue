@@ -16,7 +16,7 @@
     </view>
     <view class="body">
       <scroll-view scroll-x scroll-y>
-        <t-table min-width="800px">
+        <t-table min-width="750px">
           <t-tr>
             <t-th :width="80">机种</t-th>
             <t-th :width="40">站位</t-th>

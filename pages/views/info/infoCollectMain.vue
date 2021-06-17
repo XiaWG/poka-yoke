@@ -278,15 +278,15 @@
           >
             {{ item }}
           </span>
-        </view>        
-      </view>
-      <view class="footer" style="height: 100rpx;">
-        <button type="warn" style="width: 100%" @click="$refs.slice_pop.close()">
-          取消
-        </button>
-        <button type="primary" style="width: 100%" @click="handleSure">
-          确认
-        </button>
+        </view>
+        <view class="" style="height: 100rpx;margin-top: 10px">
+          <button type="warn" style="width: 80%" @click="$refs.slice_pop.close()">
+            取消
+          </button>
+          <button type="primary" style="width: 80%" @click="handleSure">
+            确认
+          </button>
+        </view>              
       </view>
 		</uni-popup>
   </view>

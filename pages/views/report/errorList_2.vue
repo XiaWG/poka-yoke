@@ -16,16 +16,16 @@
     </view>
     <view class="body">
       <scroll-view scroll-x scroll-y>
-        <t-table min-width="1240px">
+        <t-table min-width="1200px">
           <t-tr>
             <t-th :width="80">机种</t-th>
             <t-th :width="40">站位</t-th>
             <t-th :width="60">上料人</t-th>
-            <t-th :width="80">上料时间</t-th>
+            <t-th :width="75">上料时间</t-th>
             <t-th :width="60">提交人</t-th>
-            <t-th :width="80">提交时间</t-th>
+            <t-th :width="75">提交时间</t-th>
             <t-th :width="60">核料人</t-th>
-            <t-th :width="80">核料时间</t-th>
+            <t-th :width="75">核料时间</t-th>
             <t-th :width="150">旧盘</t-th>
             <t-th :width="150">新盘</t-th>
             <t-th :width="150">核料盘</t-th>
@@ -45,19 +45,19 @@
               <t-td :width="60">
                 {{ item.loadingPeople }}
               </t-td>
-              <t-td :width="80">
+              <t-td :width="75">
                 {{ item.loadingTime }}
               </t-td>
               <t-td :width="60">
                 {{ item.updateBy }}
               </t-td>
-              <t-td :width="80">
+              <t-td :width="75">
                 {{ item.updateTime }}
               </t-td>
               <t-td :width="60">
                 {{ item.createBy }}
               </t-td>
-              <t-td :width="80">
+              <t-td :width="75">
                 {{ item.createTime }}
               </t-td>
               <t-td :width="150">

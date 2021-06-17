@@ -16,13 +16,13 @@
     </view>
     <view class="body">
       <scroll-view scroll-x scroll-y>
-        <t-table min-width="370px">
+        <t-table min-width="340px">
           <t-tr>
             <t-th :width="100">机种</t-th>
             <t-th :width="50">线体</t-th>
             <!-- <t-th :width="80">版本</t-th> -->
             <t-th :width="60">采集人</t-th>
-            <t-th :width="120">采集时间</t-th>
+            <t-th :width="80">采集时间</t-th>
             <t-th :width="50">操作</t-th>
           </t-tr>
           <template v-if='mainList.length'>
@@ -43,7 +43,7 @@
               <t-td :width="60">
                 {{ item.createBy }}
               </t-td>
-              <t-td :width="120">
+              <t-td :width="80">
                 {{ item.createTime }}
               </t-td>
               <t-td :width="50">

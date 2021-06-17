@@ -23,7 +23,7 @@
             <t-th :width="80">料盘</t-th>
             <t-th :width="50">比对</t-th>
             <t-th :width="60">操作人</t-th>
-            <t-th :width="80">操作时间</t-th>
+            <t-th :width="75">操作时间</t-th>
             <t-th :width="150">错误信息</t-th>
           </t-tr>
           <template v-if='mainList.length'>
@@ -49,7 +49,7 @@
               <t-td :width="60">
                 {{ item.createBy }}
               </t-td>
-              <t-td :width="80">
+              <t-td :width="75">
                 {{ item.createTime }}
               </t-td>
               <t-td :width="150">
