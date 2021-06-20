@@ -48,13 +48,6 @@
 			}
 		},
 		{
-			"path": "pages/operateList/index",
-			"style": {
-				"navigationBarTitleText": "工序列表"
-			}
-		},
-		
-		{
 			"path": "pages/center/center",
 			"style": {
 				"navigationBarTitleText": "我的"
@@ -429,6 +422,73 @@
 					}  
 				}
 			}
+		},
+		{
+			"path": "pages/views/output/index",
+			"style": {
+				"navigationBarTitleText": "产量信息",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false,
+				"app-plus": { 
+					"titleNView": {
+						"buttons": [{
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "right",
+							"fontSize": "30px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue75e"
+						}]
+					}  
+				}
+			}
+		},
+		{
+			"path": "pages/views/output/main",
+			"style": {
+				"navigationBarTitleText": "产量信息",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false,
+				"app-plus": { 
+					"titleNView": {
+						"buttons": [{
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "left",
+							"fontSize": "24px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue655"
+						}, {
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "right",
+							"fontSize": "24px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue75e"
+						}]
+					}  
+				}
+			}
+		},
+		{
+			"path": "pages/views/del/index",
+			"style": {
+				"navigationBarTitleText": "回收站",
+				"onReachBottomDistance": 200,
+				"enablePullDownRefresh": false,
+				"app-plus": { 
+					"titleNView": {
+						"buttons": [{
+							"colorPressed": "#fff",
+							"fontWeight": "bold",
+							"float": "right",
+							"fontSize": "24px",
+							"fontSrc": "/static/font/iconfont.ttf",
+							"text": "\ue75e"
+						}]
+					}  
+				}
+			}
 		}
 		
 	],
@@ -444,7 +504,24 @@
 		"borderStyle": "black",
 		"backgroundColor": "#ffffff",
 		"list": [
-			
+			{
+				"pagePath": "pages/message/message",
+				"iconPath": "static/1.png",
+				"selectedIconPath": "static/1_active.png",
+				"text": "消息"
+			},
+			{
+				"pagePath": "pages/menu/menu",
+				"iconPath": "static/2.png",
+				"selectedIconPath": "static/2_active.png",
+				"text": "主页"
+			},
+			{
+				"pagePath": "pages/center/center",
+				"iconPath": "static/3.png",
+				"selectedIconPath": "static/3_active.png",
+				"text": "我的"
+			}
 		]
 	}
 }

@@ -91,11 +91,5 @@
 			color: #1890ff;
 			text-decoration: underline;
 		}
-		input{
-			border: 1px solid #eee;
-			height: 40rpx;
-			line-height: 40rpx;
-			font-size: 24rpx;
-		}
 	}
 </style>

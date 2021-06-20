@@ -206,4 +206,28 @@ export const addSolderList = (data) =>
     method: "post",
     body: data,
   })
+
+export const listByProgramAndTime = (data) =>
+  request("/pda/pdaProductionInfo/listByProgramAndTime", {
+    method: "post",
+    body: data,
+  })
+
+export const addAndUpdateProductionInfo = (data) =>
+  request("/pda/pdaProductionInfo/addAndUpdateProductionInfo", {
+    method: "post",
+    body: data,
+  })
+
+  // 图标查询
+export const currentMonthList = (data) =>
+  request("/pda/pdaProductionInfo/currentMonthList", {
+    method: "post",
+    body: data,
+  })
   
+export const pdaRecoveryList = (data) =>
+  request("/pda/pdaRecovery/list ", {
+    method: "post",
+    body: data,
+  })

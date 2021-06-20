@@ -9,12 +9,12 @@ export default [
 				icon: "xxcj",
 				url: "/pages/views/info/materailStationForm",
 			},
-			{
-				id: 2,
-				title: "系统参数",
-				icon: "xtcs",
-				url: "/pages/center/center",
-			},
+			// {
+			// 	id: 2,
+			// 	title: "系统参数",
+			// 	icon: "xtcs",
+			// 	url: "/pages/center/center",
+			// },
 			{
 				id: 3,
 				title: "料站表",
@@ -43,7 +43,7 @@ export default [
 				id: 3,
 				title: "产量信息",
 				icon: "clxx",
-				url: "",
+				url: "/pages/views/output/index",
 			},
       {
 				id: 4,
@@ -71,12 +71,12 @@ export default [
 		id: 3,
 		title: "拓展区",
 		children: [
-			// {
-			// 	id: 1,
-			// 	title: "防错",
-			// 	icon: "xxcj",
-			// 	url: "/pages/views/ext/index",
-			// },
+			{
+				id: 1,
+				title: "回收站",
+				icon: "xxcj",
+				url: "/pages/views/del/index",
+			},
 		],
 	},
 ]

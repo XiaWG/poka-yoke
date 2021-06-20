@@ -16,53 +16,29 @@
     </view>
     <view class="body">
       <scroll-view scroll-x scroll-y>
-        <t-table min-width="800px">
+        <t-table>
           <t-tr>
-            <t-th :width="80">机种</t-th>
-            <t-th :width="40">站位</t-th>
-            <t-th :width="80">旧盘</t-th>
-            <t-th :width="80">新盘</t-th>
-            <t-th :width="60">操作人</t-th>
-            <t-th :width="80">操作时间</t-th>
-            <t-th :width="60">提交人</t-th>
-            <t-th :width="80">提交时间</t-th>
-            <t-th :width="60">确认人</t-th>
-            <t-th :width="80">确认时间</t-th>
+            <t-th :width="100">时间</t-th>
+            <t-th :width="100">机种</t-th>
+            <t-th :width="100">产量</t-th>
+            <t-th :width="50">线体</t-th>
           </t-tr>
           <template v-if='mainList.length'>
             <t-tr 
               v-for="(item, index) in mainList" 
               :key="index"
             >
-              <t-td :width="80">
-                {{ item.programName }}
+              <t-td :width="100">
+                {{ item.time }}
               </t-td>
-              <t-td :width="40">
-                {{ item.stationName }}
+              <t-td :width="100">
+                {{ item.program }}
               </t-td>
-              <t-td :width="80">
-                {{ item.oldBarcode }}
+              <t-td :width="100">
+                {{ row['time' + (index + 1)] }}
               </t-td>
-              <t-td :width="80">
-                {{ item.newBarcode }}
-              </t-td>
-              <t-td :width="60">
-                {{ item.createBy }}
-              </t-td>
-              <t-td :width="80">
-                {{ item.createTime }}
-              </t-td>
-              <t-td :width="60">
-                {{ item.updateBy }}
-              </t-td>
-              <t-td :width="80">
-                {{ item.updateTime }}
-              </t-td>
-              <t-td :width="60">
-                {{ item.confirmBy }}
-              </t-td>
-              <t-td :width="80">
-                {{ item.confirmTime }}
+              <t-td :width="50">
+                {{ item.lineName }}
               </t-td>
             </t-tr>
           </template>
@@ -78,38 +54,9 @@
         <input 
           class="queryInput"
           type="text"
-          placeholder="请选择操作时间"
-          v-model.trim="rangeTime"
+          placeholder="请选择时间"
+          v-model.trim="query.createTime"
         />
-      </view>
-      <view>
-        <input 
-          class="queryInput"
-          type="text"
-          placeholder="请扫描或录入程序名称"
-          v-model.trim="query.programName"
-        />
-      </view>
-      <view>
-        <input class="queryInput"
-          type="text"
-          placeholder="请扫描或录入线体名称"
-          v-model.trim="query.lineName"
-        />        
-      </view>
-      <view>
-        <input class="queryInput"
-          type="text"
-          placeholder="请扫描或录入站位名称"
-          v-model.trim="query.stationName"
-        />        
-      </view>
-      <view>
-        <input class="queryInput"
-          type="text"
-          placeholder="请扫描或录入操作人"
-          v-model.trim="query.confirmBy"
-        />        
       </view>
       <view style="padding: 20rpx;display:flex;flex-direction: row">
         <span class="searchBtn" style="background: #24bb24" @click="search(query)">确认</span>
@@ -120,7 +67,6 @@
         ref="calendar"
         :insert="false"
         :lunar="true"
-        :range="true"
         @confirm="handleChange"
       />
     </uni-popup>
@@ -130,7 +76,7 @@
 
 <script>
 import uniCalendar from '@/components/uni-calendar/uni-calendar.vue'
-import { pdaScanConfirmList } from '@/api/api.js'
+import { listByProgramAndTime } from '@/api/api.js'
 import tTable from "@/components/t-table/t-table.vue";
 import tTh from "@/components/t-table/t-th.vue";
 import tTr from "@/components/t-table/t-tr.vue";
@@ -144,27 +90,53 @@ export default {
     tTr,
     tTd,
   },
+  props: {
+    option: Object
+  },
   data() {
     return {
-      rangeTime: '',
       query: {
-        begin: '',
-        end: '',
-        programName: '',
-        lineName: '',
-        stationName: '',
-        confirmBy: '',
-        programId: ''
+        programId: this.option.programId,
+        createTime: this.$formatterTime(new Date(), false, 1)
       },
-      mainList: [
-        
-      ]
+      row: {}
     }
   },
 
+  computed: {
+    times () {
+      return [        
+        '00:00 ~ 02:00',
+        '02:00 ~ 04:00',
+        '04:00 ~ 06:00',
+        '06:00 ~ 08:00',      
+        '08:00 ~ 10:00',
+        '10:00 ~ 12:00',
+        '12:00 ~ 14:00',
+        '14:00 ~ 16:00',
+        '16:00 ~ 18:00',
+        '18:00 ~ 20:00',
+        '20:00 ~ 22:00',
+        '22:00 ~ 24:00',
+      ]
+    },
+    mainList () {
+      return this.times.map(d => {
+        return {
+          time: d,
+          lineName: this.option.productLine,
+          program: this.option.name,
+          programId: this.option.programId
+        }
+      })
+    },
+  },
+
   mounted () {
+    this.query.programName = this.option.name
+    this.query.lineName = this.option.productLine
     setTimeout(() => {
-      this.search({ select: 'top' })
+      this.search(this.query)
     }, 100)
   },
 
@@ -172,33 +144,24 @@ export default {
     handleClick () {
       this.$refs.popup.open()
     },
+
     search (query) {
       this.$refs.popup.close()
       uni.showLoading()
-      pdaScanConfirmList(query).then(res => {
+      listByProgramAndTime(query).then(res => {
         uni.hideLoading()
-        this.mainList = res.rows
+        this.row = res.rows[0] || {}
       })
     },
+
     reset () {
-      // this.query.createTime = this.$formatterTime(new Date(), false, 1)
-      this.query.programName = ''
-      this.query.lineName = '',
-      this.query.stationName = '',
-      this.query.confirmBy = ''
-      this.query.begin = ''
-      this.query.end = ''
-      this.rangeTime = ''
+      this.query.createTime = this.$formatterTime(new Date(), false, 1)
     },
+
     handleChange (e) {
-      this.query.begin = e.range.before
-      this.query.end = e.range.after
-      this.rangeTime = e.range.before + '~' +  e.range.after
+      this.query.createTime = e.fulldate
     }
-  },
-  onNavigationBarButtonTap(e) {
-    this.$store.commit('showKeyboard/SET_KEYBOARD_TIMER', true)
-	},
+  }
   
 }
 </script>
@@ -212,7 +175,7 @@ export default {
   line-height: 80rpx;
   border: 1px solid #ccc;
   border-radius: 25px;
-  margin: 10rpx;
+  margin: 5rpx 10rpx;
   padding: 0 10rpx;
   width: 100%;
 }
@@ -266,7 +229,7 @@ export default {
   font-size: 30rpx;
 }
 .header{
-  height: 100rpx;
+  height: 85rpx;
   background: #fff;
   overflow: hidden;
 }
@@ -276,7 +239,7 @@ export default {
   flex-direction: column;
   overflow: auto;
   background: #fff;
-  padding: 20rpx 10rpx;
+  padding: 0 10rpx;
 }
 
 .footer{

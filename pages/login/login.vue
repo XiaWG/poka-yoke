@@ -113,7 +113,6 @@ import { mapMutations, mapState } from "vuex";
 import { login, getOperateList, workOrderStateMachine } from "@/api/remote.js";
 import i18n from "@/i18n/index.js";
 import md5 from "@/utils/md5.js";
-import menus from './menu.js'
 
 export default {
   data() {
@@ -241,7 +240,6 @@ export default {
         password: md5.hex_md5(password),
       });
       const userInfo = {
-        menus,
         accessToken: res.data,
       };
       if (res.code === "sso.ok") {
@@ -296,10 +294,9 @@ export default {
           }
         }
         uni.setStorageSync("userList", JSON.stringify(this.userList));
-        const { accessToken, menus } = userInfo;
+        const { accessToken } = userInfo;
         this.updateState({
           accessToken,
-          menus,
         });
         this.getWorkOrderStateMachine()
         this.setTab()

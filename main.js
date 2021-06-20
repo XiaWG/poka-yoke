@@ -36,6 +36,7 @@ function formatterTime(value, now, type) {
   ret.str = ret.y + '-' + (ret.m < 9 ? '0' + (ret.m + 1) : (ret.m + 1)) + '-' + (ret.d < 10 ? '0' + ret.d : ret.d)
   if (now) return ret.str
   if (type === 1) return ret.str
+  if (type === 2) return (ret.y + '-' + (ret.m < 9 ? '0' + (ret.m + 1) : (ret.m + 1)))
   if (!(ret.hh === 0 && ret.mm === 0 && ret.ss === 0)) {
     ret.str += ' ' + (ret.hh < 10 ? '0' + ret.hh : ret.hh) + ':' + (ret.mm < 10 ? '0' + ret.mm : ret.mm) + ':' + (ret.ss < 10 ? '0' + ret.ss : ret.ss)
   }
