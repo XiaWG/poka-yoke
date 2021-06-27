@@ -23,11 +23,11 @@
             <t-th :width="80">旧盘</t-th>
             <t-th :width="80">新盘</t-th>
             <t-th :width="60">操作人</t-th>
-            <t-th :width="80">操作时间</t-th>
+            <t-th :width="70">操作时间</t-th>
             <t-th :width="60">提交人</t-th>
-            <t-th :width="80">提交时间</t-th>
+            <t-th :width="70">提交时间</t-th>
             <t-th :width="60">确认人</t-th>
-            <t-th :width="80">确认时间</t-th>
+            <t-th :width="70">确认时间</t-th>
           </t-tr>
           <template v-if='mainList.length'>
             <t-tr 
@@ -49,19 +49,19 @@
               <t-td :width="60">
                 {{ item.createBy }}
               </t-td>
-              <t-td :width="80">
+              <t-td :width="70">
                 {{ item.createTime }}
               </t-td>
               <t-td :width="60">
                 {{ item.updateBy }}
               </t-td>
-              <t-td :width="80">
+              <t-td :width="70">
                 {{ item.updateTime }}
               </t-td>
               <t-td :width="60">
                 {{ item.confirmBy }}
               </t-td>
-              <t-td :width="80">
+              <t-td :width="70">
                 {{ item.confirmTime }}
               </t-td>
             </t-tr>

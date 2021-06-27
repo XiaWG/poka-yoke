@@ -21,6 +21,12 @@ export default [
 				icon: "lzb",
 				url: "/pages/views/lzb/index",
 			},
+			{
+				id: 4,
+				title: "回收站",
+				icon: "hsz",
+				url: "/pages/views/del/index",
+			},
 		],
 	},
   {
@@ -71,12 +77,6 @@ export default [
 		id: 3,
 		title: "拓展区",
 		children: [
-			{
-				id: 1,
-				title: "回收站",
-				icon: "xxcj",
-				url: "/pages/views/del/index",
-			},
 		],
 	},
 ]
